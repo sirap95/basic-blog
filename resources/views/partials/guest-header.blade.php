@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('blog.index') }}">
+        <a class="navbar-brand" href="{{ route('guest.index') }}">
             Basic Blog
         </a>
 
@@ -22,6 +22,11 @@
                         <a class="dropdown-item" href="#">Link 3</a>
                     </div>
                 </li>
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.index') }}"> Admin Panel</a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

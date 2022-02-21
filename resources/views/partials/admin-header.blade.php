@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/admin') }}">
+        <a class="navbar-brand" href="{{ url('/') }}">
             Basic Blog
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -25,6 +25,11 @@
                         <a class="dropdown-item" href="#">Link 3</a>
                     </div>
                 </li>
+                @if(\Illuminate\Support\Facades\Auth::check())
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.index') }}"> Admin Panel</a>
+                    </li>
+                @endif
             </ul>
 
             <!-- Right Side Of Navbar -->
