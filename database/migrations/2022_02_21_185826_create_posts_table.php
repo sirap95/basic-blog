@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('content');
+            $table->longText('content');
             $table->string('picture')->nullable();
             $table->string('youtube_link')->nullable();
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }

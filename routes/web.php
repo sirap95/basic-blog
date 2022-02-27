@@ -26,11 +26,9 @@ Route::get('/about', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['web','auth']], function () {
 
     Route::group(['prefix' => 'admin'], function () {
-
-        //GET REQUEST
 
         Route::get('', [PostController::class, 'getAdminIndex'])->name('admin.index');
 
@@ -41,9 +39,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('edit/{id}', [PostController::class, 'getAdminEdit'])->name('admin.edit');
 
         //POST REQUEST
-
+        Route::post('upload', [\App\Http\Controllers\ImageController::class, 'upload'])->name('admin.upload');
+        Route::post('images', [\App\Http\Controllers\ImageController::class, 'index'])->name('admin.images');
         Route::post('create', [PostController::class, 'postAdminCreate'])->name('admin.create');
-
         Route::post('edit', function (Request $request, Factory $validator) {
             $validation = $validator->make($request->all(), [
                 'title' => 'required|min:5',

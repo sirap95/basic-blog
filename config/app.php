@@ -141,6 +141,10 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+        //New
+        UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -179,6 +183,9 @@ return [
 
     ],
 
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
@@ -189,7 +196,7 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
-
+    'Image' => Intervention\Image\Facades\Image::class,
     'aliases' => Facade::defaultAliases()->merge([
         // ...
     ])->toArray(),
