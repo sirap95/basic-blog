@@ -41,7 +41,6 @@
     <!-- Version Garden CSS for this template -->
     <link href="{{ asset('assets/css/version/blog.css') }}" rel="stylesheet" type="text/css">
 
-
 </head>
 
 <body>
@@ -57,13 +56,11 @@
 </main>
 </div>
 @include('partials.footer')
-</body>
-</html>
-@stack("scripts")
-
+@stack('scripts')
 <script src="{{asset('assets/js/jquery.min.js')}}"></script>
 <script src="{{asset('assets/js/app.js')}}"></script>
 <script src="{{asset('assets/js/tether.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/js/custom.js')}}"></script>
-
+</body>
+</html>

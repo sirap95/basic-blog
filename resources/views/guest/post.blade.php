@@ -36,6 +36,14 @@
 
                         <div class="blog-content">
                             <div class="pp">
+                                <h4> {{$post->description}} </h4>
+                            </div>
+                        </div><!-- end content -->
+
+
+
+                        <div class="blog-content">
+                            <div class="pp">
                                 <p> {!! html_entity_decode($post->content) !!} </p>
 
                             </div>

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Factory;
 
 class PostController extends Controller
 {
@@ -56,22 +56,36 @@ class PostController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|min:5',
+            'description' => 'required|min:5|max:255',
+            'preview_picture',
             'content' => 'required|min:15'
         ]);
         $post = new Post([
             'title' => $request->input('title'),
-            'content' => $request->input('content')
+            'content' => $request->input('content'),
+            'description' => $request->input('description'),
+            'preview_picture' => $request->input('preview_picture')
         ]);
         $post->save();
         return redirect()->route('admin.index')->with('info', 'Post created, title is: ' . $request->input('title'));
     }
 
-    public function liker($postId)
+    public function postAdminEdit(Request $request, $id)
     {
-        $like = new Like([
-            'post_id' => $postId
+        $this->validate($request, [
+            'title' => 'required|min:5',
+            'content' => 'required|min:10',
+            'description' => 'required|min:15|max:255',
+            'preview_picture'
         ]);
-        $like->save();
-        return redirect()->back();
+        Post::where('id', $id)->update([
+            'title' => $request->input('title'),
+                'content' => $request->input('content'),
+                'description' => $request->input('description'),
+                'preview_picture' => $request->input('preview_picture')
+            ]);
+
+        return redirect()->route('admin.index')
+            ->with('info', 'Post edited, new title: ' . $request->input('title'));
     }
 }

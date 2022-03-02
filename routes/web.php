@@ -42,17 +42,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::post('upload', [\App\Http\Controllers\ImageController::class, 'upload'])->name('admin.upload');
         Route::post('images', [\App\Http\Controllers\ImageController::class, 'index'])->name('admin.images');
         Route::post('create', [PostController::class, 'postAdminCreate'])->name('admin.create');
-        Route::post('edit', function (Request $request, Factory $validator) {
-            $validation = $validator->make($request->all(), [
-                'title' => 'required|min:5',
-                'content' => 'required|min:10'
-            ]);
-            if ($validation->fails()) {
-                return redirect()->back()->withErrors($validation);
-            }
-            return redirect()->route('admin.index')
-                ->with('info', 'Post edited, new title: ' . $request->input('title'));
-        })->name('admin.update');
+        Route::post('editPost/{id}', [PostController::class, 'postAdminEdit'])->name('admin.update');
 
         Route::get('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
     });

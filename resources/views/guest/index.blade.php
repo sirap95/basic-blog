@@ -26,7 +26,7 @@
                                         <span class="bg-aqua"><a href="#" title="">Category</a></span>
                                         <h4><a href="{{ route('guest.post', ['id' => $post->id]) }}"
                                                title="">{{ $post->title }}</a></h4>
-                                        <p>{!! html_entity_decode(\Illuminate\Support\Str::limit($post->content, 500)) !!} </p>
+                                        <p>{{ \Illuminate\Support\Str::limit($post->description, 150) }} </p>
                                         <small><a href="garden-category.html" title=""><i class="fa fa-eye"></i> likes
                                             </a></small>
                                         <small><a href="garden-single.html"

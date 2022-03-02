@@ -11,8 +11,10 @@ class Post extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'content',
-        'picture',
+        'preview_picture',
         'youtube_link',
+        'views'
     ];
 }
