@@ -29,23 +29,17 @@ Auth::routes();
 Route::group(['middleware' => ['web','auth']], function () {
 
     Route::group(['prefix' => 'admin'], function () {
-
+        //GET ROUTES
         Route::get('', [PostController::class, 'getAdminIndex'])->name('admin.index');
-
-        Route::get('create', function () {
-            return view('admin.create');
-        })->name('admin.create');
-
+        Route::get('create', function () {return view('admin.create');})->name('admin.create');
         Route::get('edit/{id}', [PostController::class, 'getAdminEdit'])->name('admin.edit');
+        Route::get('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
 
-        //POST REQUEST
+        //POST ROUTES
         Route::post('upload', [\App\Http\Controllers\ImageController::class, 'upload'])->name('admin.upload');
-        Route::post('images', [\App\Http\Controllers\ImageController::class, 'index'])->name('admin.images');
         Route::post('create', [PostController::class, 'postAdminCreate'])->name('admin.create');
         Route::post('editPost/{id}', [PostController::class, 'postAdminEdit'])->name('admin.update');
-
-        Route::get('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
-    });
+        });
 
 });
 

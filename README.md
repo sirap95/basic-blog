@@ -26,7 +26,7 @@ v0.2:
 v0.3 [WIP]
 - adoption of CKEditor to edit content of post (DONE)
 - Main Picture upload in index page (TO-DO)
-- Add Preview Picture (TO-DO)
+- Add Preview Picture (DONE)
 
 ## Installation
 If you have already a working enviroment

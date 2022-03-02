@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ImageController extends Controller
 {
@@ -27,8 +29,23 @@ class ImageController extends Controller
         }
     }
 
-    public function uploadPreviewPicture(Request $request) {
+    public function uploadPreviewPicture(Request $request)
+    {
+        if ($request->hasFile('preview_picture')) {
 
+            $image = $request->file('preview_picture');
+            $originName = $image->getClientOriginalName();
+            $filename = pathinfo($originName, PATHINFO_FILENAME);
+
+            $extension = $image->getClientOriginalExtension();
+            $image_resize = Image::make($image->getRealPath());
+            $image_resize->resize(800, 800);
+            $filename = $filename . '_' . time() . '.' . $extension;
+            $path = ('images/preview_images/' . $filename);
+            $image_resize->save(public_path($path));
+
+            return $path;
+        }
     }
 
 }

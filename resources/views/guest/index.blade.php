@@ -15,7 +15,9 @@
                                     <div class="col-md-4">
                                         <div class="post-media">
                                             <a href="{{ route('guest.post', ['id' => $post->id]) }}" title="">
-                                                <img src="{{asset('assets/upload/garden_sq_01.jpg')}}" alt=""
+                                                <img src="{{asset($post->preview_picture != null ?
+                                                        $post->preview_picture : 'assets/upload/garden_sq_01.jpg' )}}"
+                                                     alt=""
                                                      class="img-fluid">
                                                 <div class="hovereffect"></div>
                                             </a>
@@ -27,7 +29,8 @@
                                         <h4><a href="{{ route('guest.post', ['id' => $post->id]) }}"
                                                title="">{{ $post->title }}</a></h4>
                                         <p>{{ \Illuminate\Support\Str::limit($post->description, 150) }} </p>
-                                        <small><a href="garden-category.html" title=""><i class="fa fa-eye"></i> likes
+                                        <small><a href="garden-category.html" title=""><i class="fa fa-eye"></i>
+                                                {{$post->views}}
                                             </a></small>
                                         <small><a href="garden-single.html"
                                                   title="">{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</a></small>
@@ -36,7 +39,6 @@
                                 </div><!-- end blog-box -->
                                 <hr class="invis">
                             @endforeach
-
 
                         </div><!-- end blog-list -->
                     </div><!-- end page-wrapper -->

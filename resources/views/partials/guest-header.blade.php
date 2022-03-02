@@ -36,7 +36,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9" style="font-size: xxx-large; font-weight: bold; display: inline-block; margin: 0 auto; padding: 3px;">
-                    <div class="logo">
+                    <div class="logo" style="text-align: center">
                         <a href="{{ route('guest.index') }}" >BASIC BLOG</a>
                     </div><!-- end logo -->
                 </div>

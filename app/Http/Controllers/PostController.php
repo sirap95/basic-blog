@@ -60,11 +60,13 @@ class PostController extends Controller
             'preview_picture',
             'content' => 'required|min:15'
         ]);
+        $image = new ImageController();
+
         $post = new Post([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'description' => $request->input('description'),
-            'preview_picture' => $request->input('preview_picture')
+            'preview_picture' => $image->uploadPreviewPicture($request)
         ]);
         $post->save();
         return redirect()->route('admin.index')->with('info', 'Post created, title is: ' . $request->input('title'));
