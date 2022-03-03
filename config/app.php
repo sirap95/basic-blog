@@ -142,7 +142,6 @@ return [
          * Laravel Framework Service Providers...
          */
         //New
-        UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
         Illuminate\Auth\AuthServiceProvider::class,
