@@ -36,7 +36,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
 
         //POST ROUTES
-        Route::post('upload', [\App\Http\Controllers\ImageController::class, 'upload'])->name('admin.upload');
+        Route::post('upload', [PostController::class, 'upload'])->name('admin.upload');
         Route::post('create', [PostController::class, 'postAdminCreate'])->name('admin.create');
         Route::post('editPost/{id}', [PostController::class, 'postAdminEdit'])->name('admin.update');
         });

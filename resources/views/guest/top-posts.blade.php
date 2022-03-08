@@ -11,6 +11,7 @@
                         <small>{{ \Carbon\Carbon::parse($topPost->created_at)->format('d/m/Y')}}</small>
                     </div>
                 </a>
+                <p style="margin-bottom: 2%"></p>
             @endforeach
         </div>
     </div><!-- end blog-list -->

@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Factory;
 
+
+
 class PostController extends Controller
 {
-
+    use ImageController;
     /* Guest functions */
 
     public function getIndex()
     {
-        $posts = Post::all();
+        $posts = Post::latest()->paginate(6);
         return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
     }
 
@@ -57,34 +59,41 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required|min:5',
             'description' => 'required|min:5|max:255',
-            'preview_picture',
+            'preview_image',
+            'main_image',
             'content' => 'required|min:15'
         ]);
-        $image = new ImageController();
 
         $post = new Post([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'description' => $request->input('description'),
-            'preview_picture' => $image->uploadPreviewPicture($request)
+            'preview_image' => $this->uploadPreviewImage($request),
+            'main_image' => $this->uploadMainImage($request)
         ]);
         $post->save();
         return redirect()->route('admin.index')->with('info', 'Post created, title is: ' . $request->input('title'));
+    }
+    public function uploadImageContent(Request $request)
+    {
+        $this->upload($request);
     }
 
     public function postAdminEdit(Request $request, $id)
     {
         $this->validate($request, [
             'title' => 'required|min:5',
-            'content' => 'required|min:10',
+            'content' => 'required|min:15',
             'description' => 'required|min:15|max:255',
-            'preview_picture'
+            'preview_image',
+            'main_image'
         ]);
         Post::where('id', $id)->update([
             'title' => $request->input('title'),
                 'content' => $request->input('content'),
                 'description' => $request->input('description'),
-                'preview_picture' => $request->input('preview_picture')
+            'preview_image' => $this->uploadPreviewImage($request),
+                'main_image' => $this->uploadMainImage($request)
             ]);
 
         return redirect()->route('admin.index')

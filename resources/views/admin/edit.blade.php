@@ -7,10 +7,16 @@
             <form action="{{ route('admin.update', ['id' => $postId]) }}" method="post">
                 @csrf
                 <div class="form-group">
-                    <div class="form-group">
-                        <label>Preview Picture </label>
-                        <input class="form-control" type="file" name="preview_picture" placeholder="Choose image" id="preview_picture">
-                    </div>
+                    <label>Preview Picture </label>
+                    <input class="form-control" type="file" name="preview_image"
+                           placeholder="Choose preview image 4:4 aspect ratio" id="preview_image" value="{{asset($post->preview_image)}}">
+                </div>
+                <div class="form-group">
+                    <label>Main Picture </label>
+                    <input class="form-control" type="file" name="main_image"
+                           placeholder="Choose main image 16:9 aspect ratio" id="main_image" value="{{asset($post->main_image)}}">
+                </div>
+                <div class="form-group">
                     <label for="title"> Title </label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">
                 </div>

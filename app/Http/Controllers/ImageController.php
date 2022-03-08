@@ -6,7 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
-class ImageController extends Controller
+trait ImageController
 {
 
     public function upload(Request $request)
@@ -29,23 +29,42 @@ class ImageController extends Controller
         }
     }
 
-    public function uploadPreviewPicture(Request $request)
+    public function uploadPreviewImage(Request $request)
     {
-        if ($request->hasFile('preview_picture')) {
 
-            $image = $request->file('preview_picture');
-            $originName = $image->getClientOriginalName();
-            $filename = pathinfo($originName, PATHINFO_FILENAME);
+        if ($request->hasFile('preview_image')) {
 
-            $extension = $image->getClientOriginalExtension();
-            $image_resize = Image::make($image->getRealPath());
-            $image_resize->resize(800, 800);
-            $filename = $filename . '_' . time() . '.' . $extension;
-            $path = ('images/preview_images/' . $filename);
-            $image_resize->save(public_path($path));
-
-            return $path;
+            $image = $request->file('preview_image');
+            return $this->extracted($image, "preview_images", 800,800);
         }
     }
 
+    public function uploadMainImage(Request $request)
+    {
+
+        if ($request->hasFile('main_image')) {
+
+            $image = $request->file('main_image');
+            return $this->extracted($image, "main_images", 1280, 720);
+        }
+    }
+
+    /**
+     * @param array|\Illuminate\Http\UploadedFile|null $image
+     * @return string
+     */
+    public function extracted(array|\Illuminate\Http\UploadedFile|null $image, $folder, $width, $height): string
+    {
+        $originName = $image->getClientOriginalName();
+        $filename = pathinfo($originName, PATHINFO_FILENAME);
+
+        $extension = $image->getClientOriginalExtension();
+        $image_resize = Image::make($image->getRealPath());
+        $image_resize->resize($width, $height);
+        $filename = $filename . '_' . time() . '.' . $extension;
+        $path = ('images/'. $folder.'/' . $filename);
+        $image_resize->save(public_path($path));
+
+        return $path;
+    }
 }

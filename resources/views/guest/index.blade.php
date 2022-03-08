@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-
+<style>
+    #paginate:hover {
+        color: #BCBCBC !important;
+    }
+    #paginate:active {
+        background-color: #000000 !important;
+    }
+</style>
     <section class="section wb">
         <div class="container">
             <div class="row">
@@ -15,8 +22,8 @@
                                     <div class="col-md-4">
                                         <div class="post-media">
                                             <a href="{{ route('guest.post', ['id' => $post->id]) }}" title="">
-                                                <img src="{{asset($post->preview_picture != null ?
-                                                        $post->preview_picture : 'assets/upload/garden_sq_01.jpg' )}}"
+                                                <img src="{{asset($post->preview_image != null ?
+                                                        $post->preview_image : 'assets/upload/garden_sq_01.jpg' )}}"
                                                      alt=""
                                                      class="img-fluid">
                                                 <div class="hovereffect"></div>
@@ -48,14 +55,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-start">
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
+                                    {{$posts->links()}}
                             </nav>
                         </div><!-- end col -->
                     </div><!-- end row -->
@@ -75,6 +75,16 @@
                         @include('guest.top-posts')
                         <div class="widget">
                             <h2 class="widget-title">Advertising</h2>
+                            <div class="banner-spot clearfix">
+                                <div class="banner-img">
+                                    <img src="{{asset('assets/upload/banner_04.jpg')}}" alt="" class="img-fluid">
+                                </div><!-- end banner-img -->
+                            </div><!-- end banner -->
+                            <div class="banner-spot clearfix">
+                                <div class="banner-img">
+                                    <img src="{{asset('assets/upload/banner_04.jpg')}}" alt="" class="img-fluid">
+                                </div><!-- end banner-img -->
+                            </div><!-- end banner -->
                             <div class="banner-spot clearfix">
                                 <div class="banner-img">
                                     <img src="{{asset('assets/upload/banner_04.jpg')}}" alt="" class="img-fluid">

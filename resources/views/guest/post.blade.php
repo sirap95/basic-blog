@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        img {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
     <section class="section wb">
         <div class="container">
             <div class="row">
@@ -44,7 +50,7 @@
 
                         <div class="blog-content">
                             <div class="pp">
-                                <p> {!! html_entity_decode($post->content) !!} </p>
+                                <p> {!! ($post->content) !!} </p>
 
                             </div>
                         </div><!-- end content -->
@@ -80,7 +86,7 @@
                             <div class="col-lg-12">
                                 <div class="banner-spot clearfix">
                                     <div class="banner-img">
-                                        <img src="upload/banner_01.jpg" alt="" class="img-fluid">
+                                        <img src="{{asset('assets/upload/banner_01.jpg')}}" alt="" class="img-fluid">
                                     </div><!-- end banner-img -->
                                 </div><!-- end banner -->
                             </div><!-- end col -->
@@ -92,7 +98,7 @@
                             <h4 class="small-title">About author</h4>
                             <div class="row">
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-                                    <img src="upload/author.jpg" alt="" class="img-fluid rounded-circle">
+                                    <img src="{{asset('assets/upload/author.jpg')}}" alt="" class="img-fluid rounded-circle">
                                 </div><!-- end col -->
 
                                 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
@@ -162,6 +168,18 @@
 
                         <div class="widget">
                             <h2 class="widget-title">Advertising</h2>
+                            <div class="banner-spot clearfix">
+                                <div class="banner-img">
+                                    <img src="{{asset('assets/upload/banner_04.jpg')}}" alt="" class="img-fluid">
+                                </div><!-- end banner-img -->
+                            </div><!-- end banner -->
+                            <br>
+                            <div class="banner-spot clearfix">
+                                <div class="banner-img">
+                                    <img src="{{asset('assets/upload/banner_04.jpg')}}" alt="" class="img-fluid">
+                                </div><!-- end banner-img -->
+                            </div><!-- end banner -->
+                            <br>
                             <div class="banner-spot clearfix">
                                 <div class="banner-img">
                                     <img src="{{asset('assets/upload/banner_04.jpg')}}" alt="" class="img-fluid">

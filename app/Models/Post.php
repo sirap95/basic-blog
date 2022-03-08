@@ -13,7 +13,8 @@ class Post extends Model
         'title',
         'description',
         'content',
-        'preview_picture',
+        'preview_image',
+        'main_image',
         'youtube_link',
         'views'
     ];

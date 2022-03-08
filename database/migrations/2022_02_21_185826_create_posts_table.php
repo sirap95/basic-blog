@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->longText('content');
-            $table->string('preview_picture')->nullable();
+            $table->string('preview_image')->nullable();
+            $table->string('main_image')->nullable();
             $table->string('youtube_link')->nullable();
             $table->integer('views')->default(0);
             $table->timestamps();

@@ -10,7 +10,11 @@
                         @csrf
                         <div class="form-group">
                             <label>Preview Picture </label>
-                            <input class="form-control" type="file" name="preview_picture" placeholder="Choose image" id="preview_picture">
+                            <input class="form-control" type="file" name="preview_image" placeholder="Choose preview image 4:4 aspect ratio" id="preview_image">
+                        </div>
+                        <div class="form-group">
+                            <label>Main Picture </label>
+                            <input class="form-control" type="file" name="main_image" placeholder="Choose main image 16:9 aspect ratio" id="main_image">
                         </div>
                         <div class="form-group">
                             <label>Title</label>
