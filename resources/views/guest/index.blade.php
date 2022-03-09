@@ -23,7 +23,7 @@
                                         <div class="post-media">
                                             <a href="{{ route('guest.post', ['id' => $post->id]) }}" title="">
                                                 <img src="{{asset($post->preview_image != null ?
-                                                        $post->preview_image : 'assets/upload/garden_sq_01.jpg' )}}"
+                                                        'images/preview_images/'.$post->preview_image : 'assets/upload/garden_sq_01.jpg' )}}"
                                                      alt=""
                                                      class="img-fluid">
                                                 <div class="hovereffect"></div>

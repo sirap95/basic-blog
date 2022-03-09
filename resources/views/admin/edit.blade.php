@@ -4,19 +4,20 @@
     @include('error.error')
     <div class="row">
         <div class="col-md-12">
-            <form action="{{ route('admin.update', ['id' => $postId]) }}" method="post">
+            <form action="{{ route('admin.update', ['id' => $postId])}}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="form-group">
                     <label>Preview Picture </label>
-                    <input class="form-control" type="file" name="preview_image"
-                           placeholder="Choose preview image 4:4 aspect ratio" id="preview_image"
-                           value="{{asset($post->preview_image)}}">
+                    <input class="form-control" type="file" name="preview_image" id="preview_image">
+                    <img src="{{asset('images/preview_images/'.$post->preview_image)}}" width="200px">
+                    <span>4:4 ratio</span>
                 </div>
                 <div class="form-group">
                     <label>Main Picture </label>
-                    <input class="form-control" type="file" name="main_image"
-                           placeholder="Choose main image 16:9 aspect ratio" id="main_image"
-                           value="{{asset($post->main_image)}}">
+                    <input class="form-control" type="file" name="main_image" id="main_image">
+                    <img src="{{asset('images/main_images/'.$post->main_image)}}" width="300px">
+                    <span>16:9 ratio</span>
                 </div>
                 <div class="form-group">
                     <label for="title"> Title </label>
@@ -36,8 +37,11 @@
                         <textarea id="ckeditor" class="form-control" name="content">{{$post->content}}</textarea>
                     </div>
                     <input type="hidden" name="id" value="{{$postId}}">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a class="btn btn-warning" href="{{route('admin.index')}}" title="">Exit</a>
+                </div>
             </form>
+
         </div>
     </div>
 @endsection

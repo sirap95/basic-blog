@@ -3,7 +3,7 @@
 @section('content')
     <style>
         img {
-            width: 100% !important;
+            max-width: 100% !important;
             height: auto !important;
         }
     </style>
@@ -37,7 +37,7 @@
                         </div><!-- end title -->
 
                         <div class="single-post-media">
-                            <img src="{{asset('assets/upload/garden_single_01.jpg')}}" alt="" class="img-fluid">
+                            <img src="{{asset('images/main_images/'.$post->main_image)}}" alt="" class="img-fluid">
                         </div><!-- end media -->
 
                         <div class="blog-content">

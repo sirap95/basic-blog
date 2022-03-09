@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\ImageTrait;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Factory;
-
+use Illuminate\Support\Facades\File;
 
 
 class PostController extends Controller
 {
-    use ImageController;
+    use ImageTrait;
+
     /* Guest functions */
 
     public function getIndex()
@@ -50,7 +50,7 @@ class PostController extends Controller
 
     public function deleteAdminPost($id)
     {
-        $post = Post::findOrFail($id)->delete();
+        Post::findOrFail($id)->delete();
         return redirect()->route('admin.index')->with('info', 'Post deleted succesfully');
     }
 
@@ -58,22 +58,19 @@ class PostController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|min:5',
-            'description' => 'required|min:5|max:255',
-            'preview_image',
-            'main_image',
+            'description' => 'required|min:5|max:400',
             'content' => 'required|min:15'
         ]);
-
-        $post = new Post([
-            'title' => $request->input('title'),
-            'content' => $request->input('content'),
-            'description' => $request->input('description'),
-            'preview_image' => $this->uploadPreviewImage($request),
-            'main_image' => $this->uploadMainImage($request)
-        ]);
+        $post = new Post;
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+        $post->content = $request->input('content');
+        $this->updatePreviewImage($request, $post, false);
+        $this->updateMainImage($request, $post, false);
         $post->save();
         return redirect()->route('admin.index')->with('info', 'Post created, title is: ' . $request->input('title'));
     }
+
     public function uploadImageContent(Request $request)
     {
         $this->upload($request);
@@ -84,19 +81,19 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required|min:5',
             'content' => 'required|min:15',
-            'description' => 'required|min:15|max:255',
-            'preview_image',
-            'main_image'
+            'description' => 'required|min:15|max:400',
+            'main_image',
+            'preview_image'
         ]);
-        Post::where('id', $id)->update([
-            'title' => $request->input('title'),
-                'content' => $request->input('content'),
-                'description' => $request->input('description'),
-            'preview_image' => $this->uploadPreviewImage($request),
-                'main_image' => $this->uploadMainImage($request)
-            ]);
+        $post = Post::find($id);
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+        $post->content = $request->input('content');
+        $this->updatePreviewImage($request, $post, true);
+        $this->updateMainImage($request, $post, true);
+        $post->update();
 
-        return redirect()->route('admin.index')
+        return redirect()->back()
             ->with('info', 'Post edited, new title: ' . $request->input('title'));
     }
 }

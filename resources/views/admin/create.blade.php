@@ -11,12 +11,14 @@
                         <div class="form-group">
                             <label>Preview Picture </label>
                             <input class="form-control" type="file" name="preview_image"
-                                   placeholder="Choose preview image 4:4 aspect ratio" id="preview_image">
+                                   placeholder="Choose preview image" id="preview_image">
+                            <span>4:4 ratio</span>
                         </div>
                         <div class="form-group">
                             <label>Main Picture </label>
                             <input class="form-control" type="file" name="main_image"
-                                   placeholder="Choose main image 16:9 aspect ratio" id="main_image">
+                                   placeholder="Choose main image" id="main_image">
+                            <span>16:9 ratio</span>
                         </div>
                         <div class="form-group">
                             <label>Title</label>
@@ -24,7 +26,8 @@
                         </div>
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea type="text" name="description" class="form-control" onkeyup="countChar(this);"> </textarea>
+                            <textarea type="text" name="description" class="form-control"
+                                      onkeyup="countChar(this);"> </textarea>
                             <div id="the-count">
                                 <span id="charNum">0 </span>
                                 <span id="maximum">/ 400</span>
