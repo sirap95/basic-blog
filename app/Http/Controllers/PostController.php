@@ -96,4 +96,17 @@ class PostController extends Controller
         return redirect()->back()
             ->with('info', 'Post edited, new title: ' . $request->input('title'));
     }
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        // Search in the title and content columns from the posts table
+        $posts = Post::query()
+            ->where('title', 'LIKE', "%{$search}%")
+            ->orWhere('content', 'LIKE', "%{$search}%")
+            ->latest()->paginate(6);
+
+        // Return the search view with the result
+        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+    }
 }

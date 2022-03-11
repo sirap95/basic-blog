@@ -6,7 +6,8 @@
                 <a href="{{ route('guest.post', ['id' => $topPost->id]) }}"
                    class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="w-100 justify-content-between">
-                        <img src="{{asset('/assets/upload/garden_sq_09.jpg')}}" alt="" class="img-fluid float-left">
+                        <img src="{{asset($topPost->preview_image != null ? 'images/preview_images/'.$topPost->preview_image :
+                            'assets/upload/garden_sq_01.jpg' )}}" alt="" class="img-fluid float-left">
                         <h5 class="mb-1">{{ $topPost->title }}</h5>
                         <small>{{ \Carbon\Carbon::parse($topPost->created_at)->format('d/m/Y')}}</small>
                     </div>

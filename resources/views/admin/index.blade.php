@@ -42,8 +42,13 @@
                          width="50px"></td>
                 <td>{{ $post->views }}</td>
                 <td>{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</td>
-                <td><a href="{{ route('admin.edit', ['id' => $post->id]) }}">Edit</a>
-                    <a href="{{ route('admin.delete', ['id' => $post->id]) }}"> Delete </a>
+                <td style='white-space: nowrap'>
+                    <form class="form-inline" action="{{ route('admin.delete', ['id' => $post->id]) }}"
+                          method="POST">
+                        @csrf
+                        <a class="btn btn-warning" href="{{ route('admin.edit', ['id' => $post->id]) }}">Edit</a>
+                        <button style="margin-left: 2%" type="submit" class="btn btn-primary"> Delete</button>
+                    </form>
                 </td>
             </tr>
         @endforeach

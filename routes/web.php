@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PostController::class, 'getIndex'])->name('guest.index');
+Route::get('/search', [PostController::class, 'search'])->name('guest.search');
 
 Route::get('/post/{id}', [PostController::class, 'getPost'])->name('guest.post');
 
@@ -33,7 +34,7 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('', [PostController::class, 'getAdminIndex'])->name('admin.index');
         Route::get('create', function () {return view('admin.create');})->name('admin.create');
         Route::get('edit/{id}', [PostController::class, 'getAdminEdit'])->name('admin.edit');
-        Route::get('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
+        Route::post('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
 
         //POST ROUTES
         Route::post('upload', [PostController::class, 'upload'])->name('admin.upload');
