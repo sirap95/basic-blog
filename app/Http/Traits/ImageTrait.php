@@ -43,13 +43,7 @@ trait ImageTrait
                     File::delete($destination);
                 }
             }
-
-            $file = $request->file('preview_image');
-            $ext = $file->getClientOriginalExtension();
-            $name = $file->getClientOriginalName();
-            $filename = pathinfo($name, PATHINFO_FILENAME).date('d-m-Y').'.'.$ext;
-            $file->move('images/preview_images/', $filename);
-            $post->preview_image = $filename;
+            $this->extract('preview_image', 'preview_images', $request, $post, 'preview_image');
         }
     }
 
@@ -66,13 +60,32 @@ trait ImageTrait
                     File::delete($destination);
                 }
             }
-            $file = $request->file('main_image');
-            $ext = $file->getClientOriginalExtension();
-            $name = $file->getClientOriginalName();
-            $filename = pathinfo($name, PATHINFO_FILENAME).date('d-m-Y').'.'.$ext;
-            $file->move('images/main_images/', $filename);
-            $post->main_image = $filename;
+            $this->extract('main_image', 'main_images', $request, $post, 'main_image');
         }
+    }
+    public function uploadProfileImage(Request $request, $admin, $update) {
+        if($request->hasFile('profile_image'))
+        {
+            if($update)
+            {
+                $destination = 'images/profile_images/'.$admin->profile_image;
+                if (File::exists($destination))
+                {
+                    File::delete($destination);
+                }
+            }
+            $this->extract('profile_image', 'profile_images', $request, $admin, 'profile_image');
+        }
+    }
+
+    public function extract($image, $folder, $request, $table, $fileUploaded)
+    {
+        $file = $request->file($image);
+        $ext = $file->getClientOriginalExtension();
+        $name = $file->getClientOriginalName();
+        $filename = pathinfo($name, PATHINFO_FILENAME).date('d-m-Y').'.'.$ext;
+        $file->move('images/'. $folder .'/', $filename);
+        $table->$fileUploaded = $filename;
     }
 
 }

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 
@@ -16,7 +19,11 @@ class PostController extends Controller
 
     public function getIndex()
     {
-        $posts = Post::latest()->paginate(6);
+        //$posts = Post::latest()->paginate(6);
+
+       $posts = Post::with('users')->latest()->paginate(6);
+
+
         return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
     }
 
@@ -28,7 +35,8 @@ class PostController extends Controller
 
     public function getPost($id)
     {
-        $post = Post::find($id);
+        $post = Post::with('users')->find($id);
+        //$post = Post::find($id);
         //Update post count
         Post::find($id)->increment('views');
         return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts()]);
@@ -38,7 +46,8 @@ class PostController extends Controller
 
     public function getAdminIndex()
     {
-        $posts = Post::all();
+        //show just the posts of the admin logged in
+        $posts = Post::where('user_id', Auth::id())->get();
         return view('admin.index', ['posts' => $posts]);
     }
 
@@ -62,12 +71,25 @@ class PostController extends Controller
             'content' => 'required|min:15'
         ]);
         $post = new Post;
+
+        $update = true;
+        $updateMain = true;
+
+        if ($post->preview_image == null)
+            $update = false;
+        if ($post->main_image == null)
+            $updateMain = false;
+
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $this->updatePreviewImage($request, $post, false);
-        $this->updateMainImage($request, $post, false);
+        $this->updatePreviewImage($request, $post, $update);
+        $this->updateMainImage($request, $post, $updateMain);
+        $post->user_id = Auth::id();
         $post->save();
+
+
+
         return redirect()->route('admin.index')->with('info', 'Post created, title is: ' . $request->input('title'));
     }
 

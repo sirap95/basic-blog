@@ -18,4 +18,9 @@ class Post extends Model
         'youtube_link',
         'views'
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

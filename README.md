@@ -32,7 +32,8 @@ v0.3
 ## Next release
 v0.4 [WIP]
 - Tag implementation (WIP)
-- Admin Detail Page (TO-DO)
+- Admin Detail Page (DONE)
+- Admin Info in Index and Post page (DONE)
 - 404 Page (TO-DO)
 
 

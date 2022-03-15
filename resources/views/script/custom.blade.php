@@ -1,9 +1,9 @@
 <script>
-     function countChar(val) {
+     function countChar(val, limit) {
         var len = val.value.length;
-        var maxLength = 400;
+        var maxLength = limit;
 
-        if (len >= 400) {
+        if (len >= limit) {
             $('#count-error').html('<span style="color: red;">You have exceeded the limit of '+maxLength+' characters</span>');
             $('#charNum').text(len);
         } else {

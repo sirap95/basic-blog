@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label>Description</label>
                             <textarea type="text" name="description" class="form-control"
-                                      onkeyup="countChar(this);"> </textarea>
+                                      onkeyup="countChar(this, 400);"> </textarea>
                             <div id="the-count">
                                 <span id="charNum">0 </span>
                                 <span id="maximum">/ 400</span>

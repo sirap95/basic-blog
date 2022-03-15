@@ -20,7 +20,7 @@
                             <div class="blog-meta big-meta">
                                 <small><a href="garden-single.html"
                                           title="">{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</a></small>
-                                <small><a href="blog-author.html" title="">by Autor</a></small>
+                                <small><a href="blog-author.html" title="">{{ $post->users->name }}</a></small>
                                 <small><a href="#" title=""><i class="fa fa-eye"></i> {{ $post->views }}</a></small>
                             </div><!-- end meta -->
 
@@ -98,15 +98,13 @@
                             <h4 class="small-title">About author</h4>
                             <div class="row">
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-                                    <img src="{{asset('assets/upload/author.jpg')}}" alt="" class="img-fluid rounded-circle">
+                                    <img src="{{asset($post->users->profile_image) != null ?
+                                        asset('images/profile_images/'.$post->users->profile_image) : asset('assets/upload/author.jpg')}}" alt="" class="img-fluid rounded-circle">
                                 </div><!-- end col -->
 
                                 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-                                    <h4><a href="#">Jessica</a></h4>
-                                    <p>Quisque sed tristique felis. Lorem <a href="#">visit my website</a> amet,
-                                        consectetur adipiscing elit. Phasellus quis mi auctor, tincidunt nisl eget,
-                                        finibus odio. Duis tempus elit quis risus congue feugiat. Thanks for stop Forest
-                                        Time!</p>
+                                    <h4><a href="#">{{ $post->users->name }}</a></h4>
+                                    <p>{{ $post->users->description }}</p>
 
                                     <div class="topsocial">
                                         <a href="#" data-toggle="tooltip" data-placement="bottom" title="Facebook"><i

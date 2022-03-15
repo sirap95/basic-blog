@@ -34,12 +34,14 @@ Route::group(['middleware' => ['web','auth']], function () {
         Route::get('', [PostController::class, 'getAdminIndex'])->name('admin.index');
         Route::get('create', function () {return view('admin.create');})->name('admin.create');
         Route::get('edit/{id}', [PostController::class, 'getAdminEdit'])->name('admin.edit');
-        Route::post('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
+        Route::get('detail/{id}', [\App\Http\Controllers\AdminController::class, 'show' ])->name('admin.detail');
 
         //POST ROUTES
         Route::post('upload', [PostController::class, 'upload'])->name('admin.upload');
         Route::post('create', [PostController::class, 'postAdminCreate'])->name('admin.create');
         Route::put('editPost/{id}', [PostController::class, 'postAdminEdit'])->name('admin.update');
+        Route::post('delete/{id}', [PostController::class, 'deleteAdminPost'])->name('admin.delete');
+        Route::put('detail_update/{id}', [\App\Http\Controllers\AdminController::class, 'edit'])->name('admin.detail-update');
         });
 
 });

@@ -25,7 +25,7 @@
                 </div>
                 <div class="form-group">
                     <label for="title"> Description </label>
-                    <textarea type="text" class="form-control" id="description" onkeyup="countChar(this);"
+                    <textarea type="text" class="form-control" id="description" onkeyup="countChar(this, 400);"
                               name="description">{{ $post->description }}</textarea>
                     <div id="the-count">
                         <span id="charNum">{{ strlen($post->description) }} </span>
