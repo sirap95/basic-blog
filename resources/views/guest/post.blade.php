@@ -13,7 +13,8 @@
                 <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                     <div class="page-wrapper">
                         <div class="blog-title-area">
-                            <span class="color-green"><a href="garden-category.html" title="">CATEGORY</a></span>
+                            <span class="color-green"><a href="garden-category.html" title=""
+                                                         style="padding: 1%">{{$tag}}</a></span>
 
                             <h3>{{ $post->title }}</h3>
 
@@ -45,7 +46,6 @@
                                 <h4> {{$post->description}} </h4>
                             </div>
                         </div><!-- end content -->
-
 
 
                         <div class="blog-content">
@@ -99,7 +99,8 @@
                             <div class="row">
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
                                     <img src="{{asset($post->users->profile_image) != null ?
-                                        asset('images/profile_images/'.$post->users->profile_image) : asset('assets/upload/author.jpg')}}" alt="" class="img-fluid rounded-circle">
+                                        asset('images/profile_images/'.$post->users->profile_image) : asset('assets/upload/author.jpg')}}"
+                                         alt="" class="img-fluid rounded-circle">
                                 </div><!-- end col -->
 
                                 <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
@@ -128,29 +129,39 @@
 
                         <hr class="invis1">
 
-                        <div class="custombox clearfix">
+                        <div class="custombox clearfix"> <!-- to modify -->
                             <h4 class="small-title">You may also like</h4>
+
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="blog-box">
-                                        <div class="post-media">
-                                            <a href="garden-single.html" title="">
-                                                <img src="{{ asset('assets/upload/garden_single_02.jpg') }}" alt=""
-                                                     class="img-fluid">
-                                                <div class="hovereffect">
-                                                    <span class=""></span>
-                                                </div><!-- end hover -->
-                                            </a>
-                                        </div><!-- end media -->
-                                        <div class="blog-meta">
-                                            <h4><a href="garden-single.html" title="">Nostalgia at work with family</a>
-                                            </h4>
-                                            <small><a href="blog-category-01.html" title="">News</a></small>
-                                            <small><a href="blog-category-01.html" title="">20 July, 2017</a></small>
-                                        </div><!-- end meta -->
-                                    </div><!-- end blog-box -->
-                                </div><!-- end col -->
-                            </div><!-- end row -->
+                                @foreach($relatedPosts as $relatedPost)
+                                    <div class="col-lg-6">
+                                        <div class="blog-box">
+                                            <div class="post-media" style="max-width: 300px; max-height: 300px">
+                                                <a href="{{ route('guest.post', ['id' => $relatedPost->id]) }}"
+                                                   title="">
+                                                    <img style="max-width: 300px !important; max-height: 300px !important" src="{{asset($relatedPost->preview_image != null ?
+                                                        'images/preview_images/'.$relatedPost->preview_image : 'assets/upload/garden_single_02.jpg' )}}"
+                                                         alt=""
+                                                         class="img-fluid">
+                                                    <div class="hovereffect" style="max-width: 300px; max-height: 300px">
+                                                        <span class=""></span>
+                                                    </div><!-- end hover -->
+                                                </a>
+                                            </div><!-- end media -->
+                                            <div class="blog-meta">
+                                                <h4><a href="{{route('guest.post', ['id' => $relatedPost->id]) }}"
+                                                       title="">{{$relatedPost->title}}</a>
+                                                </h4>
+                                                <small><a href="{{ route('guest.tag', ['id' => $tag_id]) }}"
+                                                          title="">{{$tag}}</a></small>
+                                                <small>
+                                                    <a>{{ \Carbon\Carbon::parse($relatedPost->created_at)->format('d/m/Y')}}</a>
+                                                </small>
+                                            </div><!-- end meta -->
+                                        </div><!-- end blog-box -->
+                                    </div>
+                            @endforeach<!-- end col -->
+                            </div> <!-- end row -->
                         </div><!-- end custom-box -->
 
                         <hr class="invis1">

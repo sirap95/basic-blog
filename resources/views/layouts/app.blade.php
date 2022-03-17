@@ -50,7 +50,6 @@
     @include('partials.guest-header')
 @endif
 
-
 <main class="container" style="border-radius: 0 0 20px 20px">
     @yield('content')
 </main>

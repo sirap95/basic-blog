@@ -6,6 +6,9 @@ use App\Http\Traits\ImageTrait;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -21,9 +24,24 @@ class PostController extends Controller
 
        $posts = Post::with('users')->latest()->paginate(6);
 
-
         return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
     }
+
+    public function getPostByTag($id)
+    {
+        $tag = Tag::find($id);
+
+        $posts = $tag->posts()->latest()->paginate(6);
+        return view('guest.tag', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+    }
+
+    public function getRelatedPosts($id, $post_id)
+    {
+        $tag = Tag::find($id);
+        $relatedPosts = $tag->posts()->where('post_id', '!=', $post_id)->orderBy('views', 'desc')->take(2)->get();
+        return $relatedPosts;
+    }
+
 
     public function getTopPosts()
     {
@@ -34,10 +52,13 @@ class PostController extends Controller
     public function getPost($id)
     {
         $post = Post::with('users')->find($id);
+        $tag = $post->tags->first()->name;
+        $tag_id = $post->tags->first()->id;
         //$post = Post::find($id);
         //Update post count
         Post::find($id)->increment('views');
-        return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts()]);
+        return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
+            'relatedPosts' => $this->getRelatedPosts($tag_id, $id), 'tag_id' => $tag_id]);
     }
 
     /* Admin functions */

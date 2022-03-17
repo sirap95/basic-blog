@@ -29,13 +29,10 @@ v0.3
 - Secured routes With CSRF_TOKEN
 - Pagination in guest/Index.blade
 
-## Next release
-v0.4 [WIP]
-- Tag implementation (WIP)
-- Admin Detail Page (DONE)
-- Admin Info in Index and Post page (DONE)
-- 404 Page (TO-DO)
-
+v0.4
+- Tag implementation
+- Admin Detail Page
+- Admin Info in Index and Post page
 
 ## Installation
 If you have already a working enviroment

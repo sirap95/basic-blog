@@ -22,8 +22,8 @@
                 </div><!-- end col -->
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="margin-left:auto; margin-right:0">
                     <div class="search text-right">
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <form class="form-inline my-2 my-lg-0" action="{{route('guest.search')}}" method="GET">
+                            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
                             <a href="/"><i class="fa fa-search"></i> Search</a>
                         </form>
                     </div><!-- end search -->
@@ -52,19 +52,19 @@
                 <div class="collapse navbar-collapse justify-content-md-center" id="Forest Timemenu">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="#">Home</a>
+                            <a class="nav-link color-green-hover" href="{{ route('guest.index') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="#">Link 1</a>
+                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 1]) }}">Tag 1</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="#">Link 2</a>
+                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 2]) }}">Tag 2</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="#">Link 3</a>
+                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 3]) }}">Tag 3</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="#">Link 4</a>
+                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 4]) }}">Tag 4</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link color-green-hover" href="#">About Us</a>

@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PostController::class, 'getIndex'])->name('guest.index');
 Route::get('/search', [PostController::class, 'search'])->name('guest.search');
-
 Route::get('/post/{id}', [PostController::class, 'getPost'])->name('guest.post');
+Route::get('/tag/{id}', [PostController::class, 'getPostByTag'])->name('guest.tag');
 
 Route::get('/about', function () {
     return view('other.about');
