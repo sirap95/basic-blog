@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
 use App\Models\Post;
-use App\Models\User;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 
 
 class PostController extends Controller
@@ -51,10 +49,17 @@ class PostController extends Controller
         return view('admin.index', ['posts' => $posts]);
     }
 
+    public function create()
+    {
+        $tags = Tag::all();
+        return view('admin.create', ['tags' => $tags]);
+    }
+
     public function getAdminEdit($id)
     {
         $post = Post::find($id);
-        return view('admin.edit', ['post' => $post, 'postId' => $id]);
+        $tags = Tag::all();
+        return view('admin.edit', ['post' => $post, 'postId' => $id, 'tags' => $tags]);
     }
 
     public function deleteAdminPost($id)
@@ -68,7 +73,8 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required|min:5',
             'description' => 'required|min:5|max:400',
-            'content' => 'required|min:15'
+            'content' => 'required|min:15',
+            'tag' => 'required'
         ]);
         $post = new Post;
 
@@ -88,7 +94,8 @@ class PostController extends Controller
         $post->user_id = Auth::id();
         $post->save();
 
-
+        $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
+        $post->tags()->attach($tag);
 
         return redirect()->route('admin.index')->with('info', 'Post created, title is: ' . $request->input('title'));
     }
@@ -104,6 +111,7 @@ class PostController extends Controller
             'title' => 'required|min:5',
             'content' => 'required|min:15',
             'description' => 'required|min:15|max:400',
+            'tag' => 'required',
             'main_image',
             'preview_image'
         ]);
@@ -114,6 +122,13 @@ class PostController extends Controller
         $this->updatePreviewImage($request, $post, true);
         $this->updateMainImage($request, $post, true);
         $post->update();
+
+        $current_tag = $post->tags->first()->id;
+        $post->tags()->detach($current_tag);
+
+        $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
+
+        $post->tags()->attach($tag);
 
         return redirect()->back()
             ->with('info', 'Post edited, new title: ' . $request->input('title'));

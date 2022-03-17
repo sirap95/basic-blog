@@ -7,6 +7,17 @@
             <form action="{{ route('admin.update', ['id' => $postId])}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <label>Tag</label>
+                <div>
+                    <select class="custom-select" id="tag" name="tag">
+                        @foreach($post->tags as $tag)
+                            <option selected>CURRENT TAG: {{$tag->name}}</option>
+                        @endforeach
+                        @foreach($tags as $tag)
+                            <option value="{{$tag->name}}">{{$tag->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>Preview Picture </label>
                     <input class="form-control" type="file" name="preview_image" id="preview_image">

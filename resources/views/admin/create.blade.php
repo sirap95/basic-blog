@@ -8,7 +8,16 @@
                 <div class="card-body">
                     <form method="post" action="{{ route('admin.create') }}" enctype="multipart/form-data">
                         @csrf
-                        <div class="form-group">
+                        <label>Tag</label>
+                        <div>
+                            <select class="custom-select" id="tag" name="tag">
+                                <option selected>Choose...</option>
+                                @foreach($tags as $tag)
+                                    <option value="{{$tag->name}}">{{$tag->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-top: 1%">
                             <label>Preview Picture </label>
                             <input class="form-control" type="file" name="preview_image"
                                    placeholder="Choose preview image" id="preview_image">
@@ -55,6 +64,10 @@
             filebrowserUploadUrl: "{{route('admin.upload', ['_token' => csrf_token()])}}",
             filebrowserUploadMethod: "form"
         });
+
+        function getName(value) {
+            console.log(value);
+        }
     </script>
     @include('script.custom')
 @endpush

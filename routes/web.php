@@ -32,7 +32,7 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::group(['prefix' => 'admin'], function () {
         //GET ROUTES
         Route::get('', [PostController::class, 'getAdminIndex'])->name('admin.index');
-        Route::get('create', function () {return view('admin.create');})->name('admin.create');
+        Route::get('create', [PostController::class, 'create'])->name('admin.create');
         Route::get('edit/{id}', [PostController::class, 'getAdminEdit'])->name('admin.edit');
         Route::get('detail/{id}', [\App\Http\Controllers\AdminController::class, 'show' ])->name('admin.detail');
 
