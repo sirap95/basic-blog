@@ -44,6 +44,7 @@ composer install
 
 php artisan migrate
 
+php artisan db:seed (if you want the tags I used to develop the blog)
 ```
 
 ## Author
