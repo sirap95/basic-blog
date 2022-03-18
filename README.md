@@ -2,10 +2,14 @@
 
 Basic Blog is a free easy to use template to create your first blog.
 
-The focus of this template is the backend, it will allow you to practice with Laravel,
-you will just need to apply a bootstrap template  for the guest side.
+The focus of this template is the backend, it will allow you to practice with Laravel and all the basic function to start learning and improve your knowledge.
+You will just need to apply a bootstrap template  for the guest side.
 
-Current release: V0.3
+Current version: V0.4
+
+Laravel v9.3.1
+
+PHP v8.1.0
 
 
 ## Release:
