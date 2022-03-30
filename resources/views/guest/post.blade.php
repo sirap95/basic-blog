@@ -19,10 +19,9 @@
                             <h3>{{ $post->title }}</h3>
 
                             <div class="blog-meta big-meta">
-                                <small><a href="garden-single.html"
-                                          title="">{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</a></small>
-                                <small><a href="blog-author.html" title="">{{ $post->users->name }}</a></small>
-                                <small><a href="#" title=""><i class="fa fa-eye"></i> {{ $post->views }}</a></small>
+                                <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</small>
+                                <small>{{ $post->users->name }}</small>
+                                <small><i class="fa fa-eye"></i> {{ $post->views }}</small>
                             </div><!-- end meta -->
 
                             <div class="post-sharing">
@@ -155,7 +154,7 @@
                                                 <small><a href="{{ route('guest.tag', ['id' => $tag_id]) }}"
                                                           title="">{{$tag}}</a></small>
                                                 <small>
-                                                    <a>{{ \Carbon\Carbon::parse($relatedPost->created_at)->format('d/m/Y')}}</a>
+                                                    {{ \Carbon\Carbon::parse($relatedPost->created_at)->format('d/m/Y')}}
                                                 </small>
                                             </div><!-- end meta -->
                                         </div><!-- end blog-box -->

@@ -144,8 +144,12 @@ class PostController extends Controller
         $this->updateMainImage($request, $post, true);
         $post->update();
 
+        $current_tag_name ="CURRENT TAG: ".$post->tags->first()->name;
         $current_tag = $post->tags->first()->id;
-        $post->tags()->detach($current_tag);
+
+        if($current_tag_name != $request->input('tag'))
+            $post->tags()->detach($current_tag);
+
 
         $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
 

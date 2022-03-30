@@ -34,17 +34,16 @@
 
                                     <div class="blog-meta big-meta col-md-8">
                                         @foreach($post->tags as $tag)
-                                            <span class="bg-aqua"><a href="#" title="">{{$tag->name}}</a></span>
+                                            <span class="bg-aqua"><a href="{{ route('guest.tag', ['id' => $tag->id]) }}" title="">{{$tag->name}}</a></span>
                                         @endforeach
                                         <h4><a href="{{ route('guest.post', ['id' => $post->id]) }}"
                                                title="">{{ $post->title }}</a></h4>
                                         <p>{{ \Illuminate\Support\Str::limit($post->description, 150) }} </p>
-                                        <small><a href="garden-category.html" title=""><i class="fa fa-eye"></i>
+                                        <small><i class="fa fa-eye"></i>
                                                 {{$post->views}}
-                                            </a></small>
-                                        <small><a href="garden-single.html"
-                                                  title="">{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</a></small>
-                                        <small><a href="#" title="">{{ $post->users->name }}</a></small>
+                                           </small>
+                                        <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</small>
+                                        <small>{{ $post->users->name }}</small>
                                     </div><!-- end meta -->
                                 </div><!-- end blog-box -->
                                 <hr class="invis">

@@ -67,7 +67,7 @@
                             <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 4]) }}">Tag 4</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="#">About Us</a>
+                            <a class="nav-link color-green-hover" href="{{ route('other.about')}}">About Us</a>
                         </li>
                     </ul>
                 </div>
