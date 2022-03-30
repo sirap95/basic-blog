@@ -51,6 +51,9 @@ php artisan migrate
 php artisan db:seed (if you want the tags I used to develop the blog)
 ```
 
+## DEMO Website
+[BASIC-BLOG DEMO](https://basicblogdemo.com)
+
 ## Author
 [@sirap95](https://www.github.com/sirap95)
 
