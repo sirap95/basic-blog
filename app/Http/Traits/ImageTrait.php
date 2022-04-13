@@ -2,8 +2,10 @@
 
 namespace App\Http\Traits;
 
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 trait ImageTrait
 {
@@ -50,6 +52,7 @@ trait ImageTrait
     public function updateMainImage(Request $request, $post, $update)
     {
 
+
         if($request->hasFile('main_image'))
         {
             if($update)
@@ -77,9 +80,25 @@ trait ImageTrait
             $this->extract('profile_image', 'profile_images', $request, $admin, 'profile_image');
         }
     }
+    public function uploadImageNew(Request $request) {
+        $request->validate([
+            'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $image_name = $request->main_image->getClientOriginalName().time().'.'.$request->main_image->extension();
+        $path = Storage::disk('s3')->put('main_images', $request->main_image);
+        $pathUrl = Storage::disk('s3')->url($path);
+        $image = new Image;
+        $image->filename = $image_name;
+        $image->url = $pathUrl;
+        $image->save();
+
+        $id = $image->id;
+        return $id;
+    }
 
     public function extract($image, $folder, $request, $table, $fileUploaded)
     {
+
         $file = $request->file($image);
         $ext = $file->getClientOriginalExtension();
         $name = $file->getClientOriginalName();

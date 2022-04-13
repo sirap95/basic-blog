@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
@@ -54,7 +55,8 @@ class PostController extends Controller
         $post = Post::with('users')->find($id);
         $tag = $post->tags->first()->name;
         $tag_id = $post->tags->first()->id;
-        //$post = Post::find($id);
+        $images = $post->images->all();
+        $main_image_url =
         //Update post count
         Post::find($id)->increment('views');
         return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
@@ -111,10 +113,12 @@ class PostController extends Controller
         $post->description = $request->input('description');
         $post->content = $request->input('content');
         $this->updatePreviewImage($request, $post, $update);
-        $this->updateMainImage($request, $post, $updateMain);
+        $image_id = $this->uploadImageNew($request);
         $post->user_id = Auth::id();
         $post->save();
-
+        $id = $post->id;
+        $image = Image::findOrFail($image_id);
+        $image->posts()->attach($id);
         $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
         $post->tags()->attach($tag);
 

@@ -13,7 +13,7 @@
                 <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                     <div class="page-wrapper">
                         <div class="blog-title-area">
-                            <span class="color-green"><a href="garden-category.html" title=""
+                            <span class="color-green"><a href="{{ route('guest.tag', ['id' => $tag_id]) }}" title=""
                                                          style="padding: 1%">{{$tag}}</a></span>
 
                             <h3>{{ $post->title }}</h3>
