@@ -30,7 +30,23 @@ trait ImageTrait
         }
     }
 
+    //TODO: Delete row in post_image if already exist and delete image on S3 Bucket
+    public function uploadPreviewImageNew(Request $request) {
+        $request->validate([
+            'preview_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $image_name = $request->preview_image->getClientOriginalName().time().'.'.$request->main_image->extension();
+        $path = Storage::disk('s3')->put('preview_images', $request->preview_image);
+        $pathUrl = Storage::disk('s3')->url($path);
+        $image = new Image;
+        $image->filename = $image_name;
+        $image->url = $pathUrl;
+        $image->save();
 
+        $id = $image->id;
+        return $id;
+    }
+    /*
     public function updatePreviewImage(Request $request, $post, $update)
     {
 
@@ -47,8 +63,24 @@ trait ImageTrait
             }
             $this->extract('preview_image', 'preview_images', $request, $post, 'preview_image');
         }
-    }
+    } */
+    //TODO: Delete row in post_image if already exist and delete image on S3 Bucket
+    public function uploadMainImageNew(Request $request) {
+        $request->validate([
+            'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $image_name = $request->main_image->getClientOriginalName().time().'.'.$request->main_image->extension();
+        $path = Storage::disk('s3')->put('main_images', $request->main_image);
+        $pathUrl = Storage::disk('s3')->url($path);
+        $image = new Image;
+        $image->filename = $image_name;
+        $image->url = $pathUrl;
+        $image->save();
 
+        $id = $image->id;
+        return $id;
+    }
+    /*
     public function updateMainImage(Request $request, $post, $update)
     {
 
@@ -66,6 +98,23 @@ trait ImageTrait
             $this->extract('main_image', 'main_images', $request, $post, 'main_image');
         }
     }
+    */
+    //TODO: create  relationship one to one between user and profile_image
+    public function uploadProfileImageNew(Request $request) {
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $image_name = $request->main_image->getClientOriginalName().time().'.'.$request->profile_image->extension();
+        $path = Storage::disk('s3')->put('profile_images', $request->main_profile_imageimage);
+        $pathUrl = Storage::disk('s3')->url($path);
+        $image = new Image;
+        $image->filename = $image_name;
+        $image->url = $pathUrl;
+        $image->save();
+
+        $id = $image->id;
+        return $id;
+    }
     public function uploadProfileImage(Request $request, $admin, $update) {
         if($request->hasFile('profile_image'))
         {
@@ -80,22 +129,8 @@ trait ImageTrait
             $this->extract('profile_image', 'profile_images', $request, $admin, 'profile_image');
         }
     }
-    public function uploadImageNew(Request $request) {
-        $request->validate([
-            'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        $image_name = $request->main_image->getClientOriginalName().time().'.'.$request->main_image->extension();
-        $path = Storage::disk('s3')->put('main_images', $request->main_image);
-        $pathUrl = Storage::disk('s3')->url($path);
-        $image = new Image;
-        $image->filename = $image_name;
-        $image->url = $pathUrl;
-        $image->save();
 
-        $id = $image->id;
-        return $id;
-    }
-
+    //TODO: Adapt the extract method to new update method on S3 Bucket
     public function extract($image, $folder, $request, $table, $fileUploaded)
     {
 

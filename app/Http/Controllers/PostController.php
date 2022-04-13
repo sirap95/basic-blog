@@ -112,13 +112,18 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $this->updatePreviewImage($request, $post, $update);
-        $image_id = $this->uploadImageNew($request);
+        $preview_image_id = $this->uploadPreviewImageNew($request);
+        $main_image_id = $this->uploadMainImageNew($request);
         $post->user_id = Auth::id();
         $post->save();
+
         $id = $post->id;
-        $image = Image::findOrFail($image_id);
-        $image->posts()->attach($id);
+
+        $preview_image = Image::findOrFail($preview_image_id);
+        $preview_image->posts()->attach($id);
+        $main_image = Image::findOrFail($main_image_id);
+        $main_image->posts()->attach($id);
+
         $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
         $post->tags()->attach($tag);
 
