@@ -23,7 +23,8 @@
                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="margin-left:auto; margin-right:0">
                     <div class="search text-right">
                         <form class="form-inline my-2 my-lg-0" action="{{route('guest.search')}}" method="GET">
-                            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search"
+                                   aria-label="Search">
                             <a href="/"><i class="fa fa-search"></i> Search</a>
                         </form>
                     </div><!-- end search -->
@@ -35,9 +36,10 @@
     <div class="header-section">
         <div class="container">
             <div class="row">
-                <div class="col-md-9" style="font-size: xxx-large; font-weight: bold; display: inline-block; margin: 0 auto; padding: 3px;">
+                <div class="col-md-9"
+                     style="font-size: xxx-large; font-weight: bold; display: inline-block; margin: 0 auto; padding: 3px;">
                     <div class="logo" style="text-align: center">
-                        <a href="{{ route('guest.index') }}" >BASIC BLOG</a>
+                        <a href="{{ route('guest.index') }}">BASIC BLOG</a>
                     </div><!-- end logo -->
                 </div>
             </div><!-- end row -->
@@ -45,31 +47,41 @@
     </div><!-- end header -->
     <header class="header">
         <div class="container">
-            <nav class="navbar navbar-expand-md">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Forest Timemenu" aria-controls="Forest Timemenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-md-center" id="Forest Timemenu">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="{{ route('guest.index') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 1]) }}">Tag 1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 2]) }}">Tag 2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 3]) }}">Tag 3</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 4]) }}">Tag 4</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link color-green-hover" href="{{ route('other.about')}}">About Us</a>
-                        </li>
-                    </ul>
+            <nav class="navbar navbar-expand-md navbar-light">
+                <div class="container">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false"
+                            aria-label="{{ __('Toggle navigation') }}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <!-- Left Side Of Navbar -->
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link color-green-hover" href="{{ route('guest.index') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 1]) }}">Tag
+                                    1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 2]) }}">Tag
+                                    2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 3]) }}">Tag
+                                    3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link color-green-hover" href="{{ route('guest.tag', ['id' => 4]) }}">Tag
+                                    4</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link color-green-hover" href="{{ route('other.about')}}">About Us</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div><!-- end container -->
