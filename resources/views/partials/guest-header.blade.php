@@ -55,9 +55,8 @@
                             aria-label="{{ __('Toggle navigation') }}">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- Left Side Of Navbar -->
-                        <ul class="navbar-nav me-auto">
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                        <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link color-green-hover" href="{{ route('guest.index') }}">Home</a>
                             </li>
