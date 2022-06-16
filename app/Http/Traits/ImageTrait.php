@@ -31,15 +31,19 @@ trait ImageTrait
     }
 
     //TODO: Delete row in post_image if already exist and delete image on S3 Bucket
-    public function uploadPreviewImageNew(Request $request) {
+    public function uploadPreviewImageNew(Request $request)
+    {
         $request->validate([
             'preview_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $image_name = $request->preview_image->getClientOriginalName().time().'.'.$request->main_image->extension();
-        $path = Storage::disk('s3')->put('preview_images', $request->preview_image);
+        //$image_name = $request->preview_image->getClientOriginalName() . time() . '.' . $request->preview_image->extension();
+        $file = $request->preview_image;
+        $randomFileName = uniqid(rand());
+        $path = 'preview_images/' . $randomFileName . '.' . $request->preview_image->extension();
+        Storage::disk('s3')->put($path, file_get_contents($file));
         $pathUrl = Storage::disk('s3')->url($path);
         $image = new Image;
-        $image->filename = $image_name;
+        $image->filename = $path;
         $image->url = $pathUrl;
         $image->save();
 
@@ -65,15 +69,19 @@ trait ImageTrait
         }
     } */
     //TODO: Delete row in post_image if already exist and delete image on S3 Bucket
-    public function uploadMainImageNew(Request $request) {
+    public function uploadMainImageNew(Request $request)
+    {
         $request->validate([
             'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $image_name = $request->main_image->getClientOriginalName().time().'.'.$request->main_image->extension();
-        $path = Storage::disk('s3')->put('main_images', $request->main_image);
+        //$image_name = $request->main_image->getClientOriginalName() . time() . '.' . $request->main_image->extension();
+        $file = $request->preview_image;
+        $randomFileName = uniqid(rand());
+        $path = 'main_images/' . $randomFileName . '.' . $request->preview_image->extension();
+        Storage::disk('s3')->put($path, file_get_contents($file));
         $pathUrl = Storage::disk('s3')->url($path);
         $image = new Image;
-        $image->filename = $image_name;
+        $image->filename = $path;
         $image->url = $pathUrl;
         $image->save();
 
@@ -100,11 +108,12 @@ trait ImageTrait
     }
     */
     //TODO: create  relationship one to one between user and profile_image
-    public function uploadProfileImageNew(Request $request) {
+    public function uploadProfileImageNew(Request $request)
+    {
         $request->validate([
             'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $image_name = $request->main_image->getClientOriginalName().time().'.'.$request->profile_image->extension();
+        $image_name = $request->main_image->getClientOriginalName() . time() . '.' . $request->profile_image->extension();
         $path = Storage::disk('s3')->put('profile_images', $request->main_profile_imageimage);
         $pathUrl = Storage::disk('s3')->url($path);
         $image = new Image;
@@ -115,14 +124,13 @@ trait ImageTrait
         $id = $image->id;
         return $id;
     }
-    public function uploadProfileImage(Request $request, $admin, $update) {
-        if($request->hasFile('profile_image'))
-        {
-            if($update)
-            {
-                $destination = 'images/profile_images/'.$admin->profile_image;
-                if (File::exists($destination))
-                {
+
+    public function uploadProfileImage(Request $request, $admin, $update)
+    {
+        if ($request->hasFile('profile_image')) {
+            if ($update) {
+                $destination = 'images/profile_images/' . $admin->profile_image;
+                if (File::exists($destination)) {
                     File::delete($destination);
                 }
             }
@@ -137,8 +145,8 @@ trait ImageTrait
         $file = $request->file($image);
         $ext = $file->getClientOriginalExtension();
         $name = $file->getClientOriginalName();
-        $filename = pathinfo($name, PATHINFO_FILENAME).date('d-m-Y').'.'.$ext;
-        $file->move('images/'. $folder .'/', $filename);
+        $filename = pathinfo($name, PATHINFO_FILENAME) . date('d-m-Y') . '.' . $ext;
+        $file->move('images/' . $folder . '/', $filename);
         $table->$fileUploaded = $filename;
     }
 
