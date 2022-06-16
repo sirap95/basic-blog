@@ -7,11 +7,8 @@ use App\Models\Image;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -21,9 +18,8 @@ class PostController extends Controller
 
     public function getIndex()
     {
-        //$posts = Post::latest()->paginate(6);
 
-       $posts = Post::with('users')->latest()->paginate(6);
+        $posts = Post::with('users')->latest()->paginate(6);
 
         return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
     }
@@ -43,7 +39,6 @@ class PostController extends Controller
         return $relatedPosts;
     }
 
-
     public function getTopPosts()
     {
         $topPosts = Post::orderBy('views', 'desc')->take(3)->get();
@@ -55,12 +50,16 @@ class PostController extends Controller
         $post = Post::with('users')->find($id);
         $tag = $post->tags->first()->name;
         $tag_id = $post->tags->first()->id;
-        $images = $post->images->all();
-        $main_image_url =
+        $image_ids = $post->getImageIdsAttribute();
+        for ($i = 1; $i <= count($image_ids); $i++) {
+            $main_image_url = Image::where('id', '=', $image_ids[$i - 1])
+                ->where('filename', 'like', 'main%')
+                ->value('url');
+        }
         //Update post count
         Post::find($id)->increment('views');
         return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
-            'relatedPosts' => $this->getRelatedPosts($tag_id, $id), 'tag_id' => $tag_id]);
+            'relatedPosts' => $this->getRelatedPosts($tag_id, $id), 'tag_id' => $tag_id, 'main_image_url' => $main_image_url]);
     }
 
     /* Admin functions */
@@ -153,10 +152,10 @@ class PostController extends Controller
         $this->updateMainImage($request, $post, true);
         $post->update();
 
-        $current_tag_name ="CURRENT TAG: ".$post->tags->first()->name;
+        $current_tag_name = "CURRENT TAG: " . $post->tags->first()->name;
         $current_tag = $post->tags->first()->id;
 
-        if($current_tag_name != $request->input('tag'))
+        if ($current_tag_name != $request->input('tag'))
             $post->tags()->detach($current_tag);
 
 
@@ -167,6 +166,7 @@ class PostController extends Controller
         return redirect()->back()
             ->with('info', 'Post edited, new title: ' . $request->input('title'));
     }
+
     public function search(Request $request)
     {
         $search = $request->input('search');

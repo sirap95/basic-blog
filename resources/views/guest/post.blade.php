@@ -37,7 +37,7 @@
                         </div><!-- end title -->
 
                         <div class="single-post-media">
-                            <img src="{{asset('images/main_images/'.$post->main_image)}}" alt="" class="img-fluid">
+                            <img src="{{$main_image_url}}" alt="" class="img-fluid">
                         </div><!-- end media -->
 
                         <div class="blog-content">
@@ -138,11 +138,14 @@
                                             <div class="post-media" style="max-width: 300px; max-height: 300px">
                                                 <a href="{{ route('guest.post', ['id' => $relatedPost->id]) }}"
                                                    title="">
-                                                    <img style="max-width: 300px !important; max-height: 300px !important" src="{{asset($relatedPost->preview_image != null ?
+                                                    <img
+                                                        style="max-width: 300px !important; max-height: 300px !important"
+                                                        src="{{asset($relatedPost->preview_image != null ?
                                                         'images/preview_images/'.$relatedPost->preview_image : 'assets/upload/garden_single_02.jpg' )}}"
-                                                         alt=""
-                                                         class="img-fluid">
-                                                    <div class="hovereffect" style="max-width: 300px; max-height: 300px">
+                                                        alt=""
+                                                        class="img-fluid">
+                                                    <div class="hovereffect"
+                                                         style="max-width: 300px; max-height: 300px">
                                                         <span class=""></span>
                                                     </div><!-- end hover -->
                                                 </a>

@@ -75,9 +75,9 @@ trait ImageTrait
             'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         //$image_name = $request->main_image->getClientOriginalName() . time() . '.' . $request->main_image->extension();
-        $file = $request->preview_image;
+        $file = $request->main_image;
         $randomFileName = uniqid(rand());
-        $path = 'main_images/' . $randomFileName . '.' . $request->preview_image->extension();
+        $path = 'main_images/' . $randomFileName . '.' . $request->main_image->extension();
         Storage::disk('s3')->put($path, file_get_contents($file));
         $pathUrl = Storage::disk('s3')->url($path);
         $image = new Image;
