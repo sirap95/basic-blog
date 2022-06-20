@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'filename',
         'url'
     ];
+
     public function posts()
     {
-        return $this->belongsToMany(Post::class, 'post_image');
+        return $this->belongsTo(Post::class);
     }
 }

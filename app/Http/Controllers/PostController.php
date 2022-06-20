@@ -18,16 +18,14 @@ class PostController extends Controller
 
     public function getIndex()
     {
-
         $posts = Post::with('users')->latest()->paginate(6);
-
-        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+        $preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
+        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 
     public function getPostByTag($id)
     {
         $tag = Tag::find($id);
-
         $posts = $tag->posts()->latest()->paginate(6);
         return view('guest.tag', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
     }
@@ -37,6 +35,18 @@ class PostController extends Controller
         $tag = Tag::find($id);
         $relatedPosts = $tag->posts()->where('post_id', '!=', $post_id)->orderBy('views', 'desc')->take(2)->get();
         return $relatedPosts;
+    }
+
+    public function getPreviewImages()
+    {
+        $preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
+        return $preview_images;
+    }
+
+    public function getMainImages()
+    {
+        $main_images = Image::with('Posts')->where('folder', '=', 'main_images')->get();
+        return $main_images;
     }
 
     public function getTopPosts()
@@ -50,15 +60,13 @@ class PostController extends Controller
         $post = Post::with('users')->find($id);
         $tag = $post->tags->first()->name;
         $tag_id = $post->tags->first()->id;
-        $image_ids = $post->getImageIdsAttribute();
-        for ($i = 1; $i <= count($image_ids); $i++) {
-            $main_image_url = Image::where('id', '=', $image_ids[$i - 1])
-                ->where('filename', 'like', 'main%')
-                ->value('url');
-        }
+
+        $main_image_url = Image::where('post_id', '=', $id)
+            ->where('folder', '=', 'main_images')
+            ->value('url');
         //Update post count
         Post::find($id)->increment('views');
-        return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
+        return view('guest.post', ['post' => $post, 'preview_images' => $this->getPreviewImages(), 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
             'relatedPosts' => $this->getRelatedPosts($tag_id, $id), 'tag_id' => $tag_id, 'main_image_url' => $main_image_url]);
     }
 
@@ -68,7 +76,7 @@ class PostController extends Controller
     {
         //show just the posts of the admin logged in
         $posts = Post::where('user_id', Auth::id())->get();
-        return view('admin.index', ['posts' => $posts]);
+        return view('admin.index', ['posts' => $posts, 'preview_images' => $this->getPreviewImages(), 'main_images' => $this->getMainImages()]);
     }
 
     public function create()
@@ -81,7 +89,13 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $tags = Tag::all();
-        return view('admin.edit', ['post' => $post, 'postId' => $id, 'tags' => $tags]);
+        $main_image_url = Image::where('post_id', '=', $id)
+            ->where('folder', '=', 'main_images')
+            ->value('url');
+        $preview_image_url = Image::where('post_id', '=', $id)
+            ->where('folder', '=', 'preview_images')
+            ->value('url');
+        return view('admin.edit', ['post' => $post, 'postId' => $id, 'tags' => $tags, 'main_image' => $main_image_url, 'preview_image' => $preview_image_url]);
     }
 
     public function deleteAdminPost($id)
@@ -100,28 +114,18 @@ class PostController extends Controller
         ]);
         $post = new Post;
 
-        $update = true;
-        $updateMain = true;
-
-        if ($post->preview_image == null)
-            $update = false;
-        if ($post->main_image == null)
-            $updateMain = false;
-
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $preview_image_id = $this->uploadPreviewImageNew($request);
-        $main_image_id = $this->uploadMainImageNew($request);
+        $preview_image_id = $this->uploadPreviewImageNew($request, null, false);
+        $main_image_id = $this->uploadMainImageNew($request, null, false);
         $post->user_id = Auth::id();
         $post->save();
 
         $id = $post->id;
 
-        $preview_image = Image::findOrFail($preview_image_id);
-        $preview_image->posts()->attach($id);
-        $main_image = Image::findOrFail($main_image_id);
-        $main_image->posts()->attach($id);
+        Image::where('id', '=', $preview_image_id)->update(array('post_id' => $id));
+        Image::where('id', '=', $main_image_id)->update(array('post_id' => $id));
 
         $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
         $post->tags()->attach($tag);
@@ -148,8 +152,8 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $this->updatePreviewImage($request, $post, true);
-        $this->updateMainImage($request, $post, true);
+        $this->uploadPreviewImageNew($request, $post, true);
+        $this->uploadMainImageNew($request, $post, true);
         $post->update();
 
         $current_tag_name = "CURRENT TAG: " . $post->tags->first()->name;
@@ -178,6 +182,6 @@ class PostController extends Controller
             ->latest()->paginate(6);
 
         // Return the search view with the result
-        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 }

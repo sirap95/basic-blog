@@ -34,12 +34,17 @@
             <tr>
                 <td>{{ $post->title }}</td>
                 <td>{{ \Illuminate\Support\Str::limit($post->description, 60) }} </td>
-                <td><img src="{{asset($post->preview_image != null ?
-                            'images/preview_images/'.$post->preview_image : 'assets/upload/garden_sq_01.jpg' )}}"
-                         width="50px"></td>
-                <td><img src="{{asset($post->main_image != null ?
-                            'images/main_images/'.$post->main_image : 'assets/upload/garden_sq_01.jpg' )}}"
-                         width="50px"></td>
+                @foreach($preview_images as $preview_image)
+                    @if($preview_image->post_id == $post->id)
+                        <td><img src="{{asset($preview_image->url)}}" width="50px"></td>
+                    @endif
+                @endforeach
+                @foreach($main_images as $main_image)
+                    @if($main_image->post_id == $post->id)
+                        <td><img src="{{asset($main_image->url)}}"
+                                 width="50px"></td>
+                    @endif
+                @endforeach
                 <td>{{ $post->views }}</td>
                 <td>{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</td>
                 <td style='white-space: nowrap'>

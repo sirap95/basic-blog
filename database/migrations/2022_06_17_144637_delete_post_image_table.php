@@ -12,11 +12,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('post_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('post_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tag_id');
-        });
+        Schema::dropIfExists('post_image');
     }
 
     /**
@@ -26,6 +22,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('post_tag');
+        //
     }
 };

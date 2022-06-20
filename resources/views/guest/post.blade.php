@@ -138,12 +138,15 @@
                                             <div class="post-media" style="max-width: 300px; max-height: 300px">
                                                 <a href="{{ route('guest.post', ['id' => $relatedPost->id]) }}"
                                                    title="">
-                                                    <img
-                                                        style="max-width: 300px !important; max-height: 300px !important"
-                                                        src="{{asset($relatedPost->preview_image != null ?
-                                                        'images/preview_images/'.$relatedPost->preview_image : 'assets/upload/garden_single_02.jpg' )}}"
-                                                        alt=""
-                                                        class="img-fluid">
+                                                    @foreach($preview_images as $preview_image)
+                                                        @if($preview_image->post_id == $relatedPost->id)
+                                                            <img
+                                                                style="max-width: 300px !important; max-height: 300px !important"
+                                                                src="{{asset($preview_image->url)}}"
+                                                                alt=""
+                                                                class="img-fluid">
+                                                        @endif
+                                                    @endforeach
                                                     <div class="hovereffect"
                                                          style="max-width: 300px; max-height: 300px">
                                                         <span class=""></span>

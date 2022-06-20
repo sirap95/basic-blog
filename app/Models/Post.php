@@ -31,11 +31,7 @@ class Post extends Model
 
     public function images()
     {
-        return $this->belongsToMany(Image::class, 'post_image', 'post_id', 'image_id');
+        return $this->hasMany(Image::class);
     }
 
-    public function getImageIdsAttribute()
-    {
-        return $this->images->pluck('id');
-    }
 }

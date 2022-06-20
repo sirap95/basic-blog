@@ -6,8 +6,11 @@
                 <a href="{{ route('guest.post', ['id' => $topPost->id]) }}"
                    class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="w-100 justify-content-between">
-                        <img src="{{asset($topPost->preview_image != null ? 'images/preview_images/'.$topPost->preview_image :
-                            'assets/upload/garden_sq_01.jpg' )}}" alt="" class="img-fluid float-left">
+                        @foreach($preview_images as $preview_image)
+                            @if($preview_image->post_id == $topPost->id)
+                                <img src="{{asset($preview_image->url)}}" alt="" class="img-fluid float-left">
+                            @endif
+                        @endforeach
                         <h5 class="mb-1">{{ $topPost->title }}</h5>
                         <small>{{ \Carbon\Carbon::parse($topPost->created_at)->format('d/m/Y')}}</small>
                     </div>
