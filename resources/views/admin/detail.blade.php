@@ -4,14 +4,15 @@
 
     <div class="row">
         <div class="col-md-12">
-            <form action="{{ route('admin.detail-update', ['id' => \Illuminate\Support\Facades\Auth::id()])}}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.detail-update', ['id' => \Illuminate\Support\Facades\Auth::id()])}}"
+                  method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
                     <label>Profile Image </label>
                     <input class="form-control" type="file" name="profile_image" id="profile_image">
-                    <img src="{{($admin->profile_image != null ?
-                              asset('images/profile_images/'.$admin->profile_image) : 'assets/upload/author.jpg' )}}"
+                    <img src="{{($profile_image_url != null ?
+                              asset($profile_image_url) : 'assets/upload/author.jpg' )}}"
                          width="200px">
                 </div>
                 <div class="form-group">

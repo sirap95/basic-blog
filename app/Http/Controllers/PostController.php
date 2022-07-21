@@ -8,18 +8,16 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
     use ImageTrait;
 
     /* Guest functions */
-
     public function getIndex()
     {
         $posts = Post::with('users')->latest()->paginate(6);
-        $preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
+        //$preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
         return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 
@@ -27,7 +25,7 @@ class PostController extends Controller
     {
         $tag = Tag::find($id);
         $posts = $tag->posts()->latest()->paginate(6);
-        return view('guest.tag', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+        return view('guest.tag', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 
     public function getRelatedPosts($id, $post_id)
@@ -61,17 +59,24 @@ class PostController extends Controller
         $tag = $post->tags->first()->name;
         $tag_id = $post->tags->first()->id;
 
+        $user_id = $post->value('user_id');
+
+        $profile_image_url = Image::where('user_id', '=', $user_id)
+            ->where('folder', '=', 'profile_images')
+            ->value('url');
+
         $main_image_url = Image::where('post_id', '=', $id)
             ->where('folder', '=', 'main_images')
             ->value('url');
         //Update post count
         Post::find($id)->increment('views');
-        return view('guest.post', ['post' => $post, 'preview_images' => $this->getPreviewImages(), 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
-            'relatedPosts' => $this->getRelatedPosts($tag_id, $id), 'tag_id' => $tag_id, 'main_image_url' => $main_image_url]);
+        return view('guest.post', ['post' => $post, 'preview_images' => $this->getPreviewImages(),
+            'topPosts' => $this->getTopPosts(), 'tag' => $tag,
+            'relatedPosts' => $this->getRelatedPosts($tag_id, $id),
+            'tag_id' => $tag_id, 'main_image_url' => $main_image_url, 'profile_image_url' => $profile_image_url]);
     }
 
     /* Admin functions */
-
     public function getAdminIndex()
     {
         //show just the posts of the admin logged in
@@ -95,7 +100,8 @@ class PostController extends Controller
         $preview_image_url = Image::where('post_id', '=', $id)
             ->where('folder', '=', 'preview_images')
             ->value('url');
-        return view('admin.edit', ['post' => $post, 'postId' => $id, 'tags' => $tags, 'main_image' => $main_image_url, 'preview_image' => $preview_image_url]);
+        return view('admin.edit', ['post' => $post, 'postId' => $id,
+            'tags' => $tags, 'main_image' => $main_image_url, 'preview_image' => $preview_image_url]);
     }
 
     public function deleteAdminPost($id)
@@ -152,8 +158,10 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $this->uploadPreviewImageNew($request, $post, true);
-        $this->uploadMainImageNew($request, $post, true);
+        if (!empty($request->input('preview_image')))
+            $this->uploadPreviewImageNew($request, $post, true);
+        if (!empty($request->input('main_image')))
+            $this->uploadMainImageNew($request, $post, true);
         $post->update();
 
         $current_tag_name = "CURRENT TAG: " . $post->tags->first()->name;
@@ -171,6 +179,7 @@ class PostController extends Controller
             ->with('info', 'Post edited, new title: ' . $request->input('title'));
     }
 
+    /* SEARCH METHOD */
     public function search(Request $request)
     {
         $search = $request->input('search');

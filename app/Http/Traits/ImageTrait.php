@@ -13,24 +13,32 @@ trait ImageTrait
     public function upload(Request $request)
     {
         if ($request->hasFile('upload')) {
-            $originName = $request->file('upload')->getClientOriginalName();
-            $fileName = pathinfo($originName, PATHINFO_FILENAME);
-            $extension = $request->file('upload')->getClientOriginalExtension();
-            $fileName = $fileName . '_' . time() . '.' . $extension;
 
-            $request->file('upload')->move(public_path('images'), $fileName);
+            //NEW LOGIC FOR S3 AWS
+            $file = $request->file('upload');
+            $randomFileName = uniqid(rand());
+            $path = 'content_images/' . $randomFileName . '.' . $request->file('upload')->extension();
+            Storage::disk('s3')->put($path, file_get_contents($file));
+            $pathUrl = Storage::disk('s3')->url($path);
+
+            $image = new Image;
+            $image->filename = $path;
+            $image->url = $pathUrl;
+            $image->folder = 'content_images';
+
+            $image->save();
 
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-            $url = asset('images/' . $fileName);
+
             $msg = 'Image uploaded successfully';
-            $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
+            $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$pathUrl', '$msg')</script>";
 
             @header('Content-type: text/html; charset=utf-8');
             echo $response;
         }
     }
 
-    //TODO: Delete row in post_image if already exist and delete image on S3 Bucket
+    //TODO: Delete row in image table if already exist and delete image on S3 Bucket
     public function uploadPreviewImageNew(Request $request, $post, $update)
     {
         $request->validate([
@@ -38,15 +46,15 @@ trait ImageTrait
         ]);
         //$image_name = $request->preview_image->getClientOriginalName() . time() . '.' . $request->preview_image->extension();
         if ($update) {
-            $image_ids = $post->getImageIdsAttribute();
-            if (empty($image_ids)) {
-                for ($i = 1; $i <= count($image_ids); $i++) {
-                    $preview_image_url = Image::where('id', '=', $image_ids[$i - 1])
-                        ->where('filename', 'like', 'preview%')
-                        ->value('url');
-                }
-                Storage::disk('s3')->delete($preview_image_url);
-            }
+
+            $preview_image_url = Image::where('post_id', '=', $post->id)
+                ->where('folder', '=', 'preview_images')
+                ->value('url');
+
+            Storage::disk('s3')->delete($preview_image_url);
+            Image::where('post_id', '=', $post->id)
+                ->where('folder', '=', 'preview_images')->delete();
+
         }
         $file = $request->preview_image;
         $randomFileName = uniqid(rand());
@@ -86,17 +94,15 @@ trait ImageTrait
         $request->validate([
             'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        //$image_name = $request->main_image->getClientOriginalName() . time() . '.' . $request->main_image->extension();
         if ($update) {
-            $image_ids = $post->getImageIdsAttribute();
-            if (empty($image_ids)) {
-                for ($i = 1; $i <= count($image_ids); $i++) {
-                    $main_image_url = Image::where('id', '=', $image_ids[$i - 1])
-                        ->where('filename', 'like', 'main%')
-                        ->value('url');
-                }
-                Storage::disk('s3')->delete($main_image_url);
-            }
+            $main_image_url = Image::where('post_id', '=', $post->id)
+                ->where('folder', '=', 'main_images')
+                ->value('url');
+
+            Storage::disk('s3')->delete($main_image_url);
+
+            Image::where('post_id', '=', $post->id)
+                ->where('folder', '=', 'main_images')->delete();
         }
         $file = $request->main_image;
         $randomFileName = uniqid(rand());
@@ -112,66 +118,51 @@ trait ImageTrait
         $id = $image->id;
         return $id;
     }
-    /*
-    public function updateMainImage(Request $request, $post, $update)
-    {
 
-
-        if($request->hasFile('main_image'))
-        {
-            if($update)
-            {
-                $destination = 'images/main_images/'.$post->main_image;
-                if (File::exists($destination))
-                {
-                    File::delete($destination);
-                }
-            }
-            $this->extract('main_image', 'main_images', $request, $post, 'main_image');
-        }
-    }
-    */
-    //TODO: create  relationship one to one between user and profile_image
-    public function uploadProfileImageNew(Request $request)
+    public function uploadProfileImageNew(Request $request, $id, $update)
     {
         $request->validate([
             'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $image_name = $request->main_image->getClientOriginalName() . time() . '.' . $request->profile_image->extension();
-        $path = Storage::disk('s3')->put('profile_images', $request->main_profile_imageimage);
+
+        if ($update) {
+            $profile_image_url = Image::where('user_id', '=', $id)
+                ->where('folder', '=', 'profile_images')
+                ->value('url');
+
+            Storage::disk('s3')->delete($profile_image_url);
+
+            Image::where('user_id', '=', $id)
+                ->where('folder', '=', 'profile_images')->delete();
+        }
+
+        $file = $request->profile_image;
+        $randomFileName = uniqid(rand());
+        $path = 'profile_images/' . $randomFileName . '.' . $request->profile_image->extension();
+        Storage::disk('s3')->put($path, file_get_contents($file));
         $pathUrl = Storage::disk('s3')->url($path);
         $image = new Image;
-        $image->filename = $image_name;
+
+        $image->filename = $path;
         $image->url = $pathUrl;
+        $image->folder = 'profile_images';
+        $image->user_id = $id;
         $image->save();
 
-        $id = $image->id;
-        return $id;
     }
-
-    public function uploadProfileImage(Request $request, $admin, $update)
-    {
-        if ($request->hasFile('profile_image')) {
-            if ($update) {
-                $destination = 'images/profile_images/' . $admin->profile_image;
-                if (File::exists($destination)) {
-                    File::delete($destination);
+    /*
+        public function uploadProfileImage(Request $request, $admin, $update)
+        {
+            if ($request->hasFile('profile_image')) {
+                if ($update) {
+                    $destination = 'images/profile_images/' . $admin->profile_image;
+                    if (File::exists($destination)) {
+                        File::delete($destination);
+                    }
                 }
+                $this->extract('profile_image', 'profile_images', $request, $admin, 'profile_image');
             }
-            $this->extract('profile_image', 'profile_images', $request, $admin, 'profile_image');
         }
-    }
-
-    //TODO: Adapt the extract method to new update method on S3 Bucket
-    public function extract($image, $folder, $request, $table, $fileUploaded)
-    {
-
-        $file = $request->file($image);
-        $ext = $file->getClientOriginalExtension();
-        $name = $file->getClientOriginalName();
-        $filename = pathinfo($name, PATHINFO_FILENAME) . date('d-m-Y') . '.' . $ext;
-        $file->move('images/' . $folder . '/', $filename);
-        $table->$fileUploaded = $filename;
-    }
+    */
 
 }

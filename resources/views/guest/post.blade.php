@@ -54,19 +54,14 @@
                             </div>
                         </div><!-- end content -->
 
-                        <div class="blog-title-area">
-                            <div class="tag-cloud-single">
-                                <a href="#" title=""><i class="fa fa-thumbs-up"></i> likes</a>
-                            </div>
-                        </div>
 
                         <div class="blog-title-area">
                             <div class="tag-cloud-single">
                                 <span>Tags</span>
-                                <small><a href="#" title="">lifestyle</a></small>
-                                <small><a href="#" title="">colorful</a></small>
-                                <small><a href="#" title="">trending</a></small>
-                                <small><a href="#" title="">another tag</a></small>
+                                <small><a href="{{ route('guest.tag', ['id' => 1]) }}" title="">Tag 1</a></small>
+                                <small><a href="{{ route('guest.tag', ['id' => 2]) }}" title="">Tag 2</a></small>
+                                <small><a href="{{ route('guest.tag', ['id' => 3]) }}" title="">Tag 3</a></small>
+                                <small><a href="{{ route('guest.tag', ['id' => 4]) }}" title="">Tag 4</a></small>
                             </div><!-- end meta -->
 
                             <div class="post-sharing">
@@ -75,7 +70,6 @@
                                             <span class="down-mobile">Share on Facebook</span></a></li>
                                     <li><a href="#" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
                                             <span class="down-mobile">Tweet on Twitter</span></a></li>
-                                    <li><a href="#" class="gp-button btn btn-primary"><i class="fa fa-google-plus"></i></a>
                                     </li>
                                 </ul>
                             </div><!-- end post-sharing -->
@@ -97,8 +91,8 @@
                             <h4 class="small-title">About author</h4>
                             <div class="row">
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
-                                    <img src="{{asset($post->users->profile_image) != null ?
-                                        asset('images/profile_images/'.$post->users->profile_image) : asset('assets/upload/author.jpg')}}"
+                                    <img src="{{$profile_image_url != null ?
+                                        asset($profile_image_url) : asset('assets/upload/author.jpg')}}"
                                          alt="" class="img-fluid rounded-circle">
                                 </div><!-- end col -->
 

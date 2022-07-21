@@ -23,10 +23,11 @@
                                     <div class="col-md-4">
                                         <div class="post-media">
                                             <a href="{{ route('guest.post', ['id' => $post->id]) }}" title="">
-                                                <img src="{{asset($post->preview_image != null ?
-                                                        'images/preview_images/'.$post->preview_image : 'assets/upload/garden_sq_01.jpg' )}}"
-                                                     alt=""
-                                                     class="img-fluid">
+                                                @foreach($preview_images as $preview_image)
+                                                    @if($preview_image->post_id == $post->id)
+                                                        <td><img src="{{asset($preview_image->url)}}" width="50px"></td>
+                                                    @endif
+                                                @endforeach
                                                 <div class="hovereffect"></div>
                                             </a>
                                         </div><!-- end media -->
