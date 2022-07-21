@@ -23,10 +23,13 @@
                                     <div class="col-md-4">
                                         <div class="post-media">
                                             <a href="{{ route('guest.post', ['id' => $post->id]) }}" title="">
-                                                <img src="{{asset($post->preview_image != null ?
-                                                        'images/preview_images/'.$post->preview_image : 'assets/upload/garden_sq_01.jpg' )}}"
-                                                     alt=""
-                                                     class="img-fluid">
+                                                @foreach($preview_images as $preview_image)
+                                                    @if($preview_image->post_id == $post->id)
+                                                        <img src="{{asset($preview_image->url)}}"
+                                                             alt=""
+                                                             class="img-fluid">
+                                                    @endif
+                                                @endforeach
                                                 <div class="hovereffect"></div>
                                             </a>
                                         </div><!-- end media -->
@@ -34,14 +37,16 @@
 
                                     <div class="blog-meta big-meta col-md-8">
                                         @foreach($post->tags as $tag)
-                                            <span class="bg-aqua"><a href="{{ route('guest.tag', ['id' => $tag->id]) }}" title="">{{$tag->name}}</a></span>
+                                            <span class="bg-aqua"><a
+                                                    href="{{ route('guest.tag', ['id' => $tag->id]) }}"
+                                                    title="">{{$tag->name}}</a></span>
                                         @endforeach
                                         <h4><a href="{{ route('guest.post', ['id' => $post->id]) }}"
                                                title="">{{ $post->title }}</a></h4>
                                         <p>{{ \Illuminate\Support\Str::limit($post->description, 150) }} </p>
                                         <small><i class="fa fa-eye"></i>
-                                                {{$post->views}}
-                                           </small>
+                                            {{$post->views}}
+                                        </small>
                                         <small>{{ \Carbon\Carbon::parse($post->created_at)->format('d/m/Y')}}</small>
                                         <small>{{ $post->users->name }}</small>
                                     </div><!-- end meta -->

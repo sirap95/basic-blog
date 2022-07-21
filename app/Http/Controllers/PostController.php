@@ -3,36 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-
 
 class PostController extends Controller
 {
     use ImageTrait;
 
     /* Guest functions */
-
     public function getIndex()
     {
-        //$posts = Post::latest()->paginate(6);
-
-       $posts = Post::with('users')->latest()->paginate(6);
-
-        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+        $posts = Post::with('users')->latest()->paginate(6);
+        //$preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
+        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 
     public function getPostByTag($id)
     {
         $tag = Tag::find($id);
-
         $posts = $tag->posts()->latest()->paginate(6);
-        return view('guest.tag', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+        return view('guest.tag', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 
     public function getRelatedPosts($id, $post_id)
@@ -42,6 +35,17 @@ class PostController extends Controller
         return $relatedPosts;
     }
 
+    public function getPreviewImages()
+    {
+        $preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
+        return $preview_images;
+    }
+
+    public function getMainImages()
+    {
+        $main_images = Image::with('Posts')->where('folder', '=', 'main_images')->get();
+        return $main_images;
+    }
 
     public function getTopPosts()
     {
@@ -54,20 +58,30 @@ class PostController extends Controller
         $post = Post::with('users')->find($id);
         $tag = $post->tags->first()->name;
         $tag_id = $post->tags->first()->id;
-        //$post = Post::find($id);
+
+        $user_id = $post->value('user_id');
+
+        $profile_image_url = Image::where('user_id', '=', $user_id)
+            ->where('folder', '=', 'profile_images')
+            ->value('url');
+
+        $main_image_url = Image::where('post_id', '=', $id)
+            ->where('folder', '=', 'main_images')
+            ->value('url');
         //Update post count
         Post::find($id)->increment('views');
-        return view('guest.post', ['post' => $post, 'topPosts' => $this->getTopPosts(), 'tag' => $tag,
-            'relatedPosts' => $this->getRelatedPosts($tag_id, $id), 'tag_id' => $tag_id]);
+        return view('guest.post', ['post' => $post, 'preview_images' => $this->getPreviewImages(),
+            'topPosts' => $this->getTopPosts(), 'tag' => $tag,
+            'relatedPosts' => $this->getRelatedPosts($tag_id, $id),
+            'tag_id' => $tag_id, 'main_image_url' => $main_image_url, 'profile_image_url' => $profile_image_url]);
     }
 
     /* Admin functions */
-
     public function getAdminIndex()
     {
         //show just the posts of the admin logged in
         $posts = Post::where('user_id', Auth::id())->get();
-        return view('admin.index', ['posts' => $posts]);
+        return view('admin.index', ['posts' => $posts, 'preview_images' => $this->getPreviewImages(), 'main_images' => $this->getMainImages()]);
     }
 
     public function create()
@@ -80,7 +94,14 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $tags = Tag::all();
-        return view('admin.edit', ['post' => $post, 'postId' => $id, 'tags' => $tags]);
+        $main_image_url = Image::where('post_id', '=', $id)
+            ->where('folder', '=', 'main_images')
+            ->value('url');
+        $preview_image_url = Image::where('post_id', '=', $id)
+            ->where('folder', '=', 'preview_images')
+            ->value('url');
+        return view('admin.edit', ['post' => $post, 'postId' => $id,
+            'tags' => $tags, 'main_image' => $main_image_url, 'preview_image' => $preview_image_url]);
     }
 
     public function deleteAdminPost($id)
@@ -99,21 +120,18 @@ class PostController extends Controller
         ]);
         $post = new Post;
 
-        $update = true;
-        $updateMain = true;
-
-        if ($post->preview_image == null)
-            $update = false;
-        if ($post->main_image == null)
-            $updateMain = false;
-
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $this->updatePreviewImage($request, $post, $update);
-        $this->updateMainImage($request, $post, $updateMain);
+        $preview_image_id = $this->uploadPreviewImageNew($request, null, false);
+        $main_image_id = $this->uploadMainImageNew($request, null, false);
         $post->user_id = Auth::id();
         $post->save();
+
+        $id = $post->id;
+
+        Image::where('id', '=', $preview_image_id)->update(array('post_id' => $id));
+        Image::where('id', '=', $main_image_id)->update(array('post_id' => $id));
 
         $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
         $post->tags()->attach($tag);
@@ -140,14 +158,16 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->content = $request->input('content');
-        $this->updatePreviewImage($request, $post, true);
-        $this->updateMainImage($request, $post, true);
+        if (!empty($request->input('preview_image')))
+            $this->uploadPreviewImageNew($request, $post, true);
+        if (!empty($request->input('main_image')))
+            $this->uploadMainImageNew($request, $post, true);
         $post->update();
 
-        $current_tag_name ="CURRENT TAG: ".$post->tags->first()->name;
+        $current_tag_name = "CURRENT TAG: " . $post->tags->first()->name;
         $current_tag = $post->tags->first()->id;
 
-        if($current_tag_name != $request->input('tag'))
+        if ($current_tag_name != $request->input('tag'))
             $post->tags()->detach($current_tag);
 
 
@@ -158,6 +178,8 @@ class PostController extends Controller
         return redirect()->back()
             ->with('info', 'Post edited, new title: ' . $request->input('title'));
     }
+
+    /* SEARCH METHOD */
     public function search(Request $request)
     {
         $search = $request->input('search');
@@ -169,6 +191,6 @@ class PostController extends Controller
             ->latest()->paginate(6);
 
         // Return the search view with the result
-        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts()]);
+        return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 }

@@ -21,13 +21,13 @@
                 <div class="form-group">
                     <label>Preview Picture </label>
                     <input class="form-control" type="file" name="preview_image" id="preview_image">
-                    <img src="{{asset('images/preview_images/'.$post->preview_image)}}" width="200px">
+                    <img src="{{asset($preview_image)}}" width="200px">
                     <span>4:4 ratio</span>
                 </div>
                 <div class="form-group">
                     <label>Main Picture </label>
                     <input class="form-control" type="file" name="main_image" id="main_image">
-                    <img src="{{asset('images/main_images/'.$post->main_image)}}" width="300px">
+                    <img src="{{asset($main_image)}}" width="300px">
                     <span>16:9 ratio</span>
                 </div>
                 <div class="form-group">

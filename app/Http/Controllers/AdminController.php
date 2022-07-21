@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,10 @@ class AdminController extends Controller
     public function show($id)
     {
         $admin = User::findOrFail($id);
-        return view('admin.detail', ['admin' => $admin]);
+        $profile_image_url = Image::where('user_id', '=', $id)
+            ->where('folder', '=', 'profile_images')
+            ->value('url');
+        return view('admin.detail', ['admin' => $admin, 'profile_image_url' => $profile_image_url]);
     }
 
 
@@ -34,12 +38,12 @@ class AdminController extends Controller
 
         $update = true;
 
-        if ($user->profile_image == null)
+        if ($request->profile_image == null)
             $update = false;
 
         $user->name = $request->input('name');
         $user->description = $request->input('description');
-        $this->uploadProfileImage($request, $user, $update);
+        $this->uploadProfileImageNew($request, $id, $update);
         $user->update();
 
         return redirect()->back()
