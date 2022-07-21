@@ -54,7 +54,7 @@ otherwise:
 
 - [Install Laravel](https://laravel.com/docs/9.x/installation)
 - [Install IDE es. visual studio code](https://code.visualstudio.com/download)
-- [Create AWS Account and S£ Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+- [Create AWS Account and S3 Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 
 section 2:
 
