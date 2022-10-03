@@ -63,6 +63,12 @@ git clone https://github.com/sirap95/basic-blog.git
 
 composer install
 
+mv .env.example .env
+
+php artisan key:generate
+
+sudo nano .env ( check if php generated correctly your key and add the info of your database in the .env file)
+
 php artisan migrate
 
 php artisan db:seed (if you want the tags I used to develop the blog)
