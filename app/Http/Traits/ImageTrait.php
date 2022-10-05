@@ -4,7 +4,6 @@ namespace App\Http\Traits;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 trait ImageTrait
