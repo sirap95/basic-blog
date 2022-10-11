@@ -36,5 +36,5 @@
 
         </div>
     </div>
-    @include('script.custom')
+    <x-scripts.char-counter/>
 @endsection

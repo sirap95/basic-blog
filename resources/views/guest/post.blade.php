@@ -36,15 +36,15 @@
                             </div><!-- end post-sharing -->
                         </div><!-- end title -->
 
-                        <div class="single-post-media">
-                            <img src="{{$main_image_url}}" alt="" class="img-fluid">
-                        </div><!-- end media -->
+                        {{--                        <div class="single-post-media">--}}
+                        {{--                            <img src="{{$main_image_url}}" alt="" class="img-fluid">--}}
+                        {{--                        </div><!-- end media -->--}}
 
-                        <div class="blog-content">
-                            <div class="pp">
-                                <h4> {{$post->description}} </h4>
-                            </div>
-                        </div><!-- end content -->
+                        {{--                        <div class="blog-content">--}}
+                        {{--                            <div class="pp">--}}
+                        {{--                                <h4> {{$post->description}} </h4>--}}
+                        {{--                            </div>--}}
+                        {{--                        </div><!-- end content -->--}}
 
 
                         <div class="blog-content">

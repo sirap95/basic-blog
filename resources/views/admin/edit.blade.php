@@ -3,7 +3,7 @@
 @section('content')
     @include('error.error')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-lg-6">
             <form action="{{ route('admin.update', ['id' => $postId])}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
@@ -24,46 +24,45 @@
                     <img src="{{asset($preview_image)}}" width="200px">
                     <span>4:4 ratio</span>
                 </div>
-                <div class="form-group">
-                    <label>Main Picture </label>
-                    <input class="form-control" type="file" name="main_image" id="main_image">
-                    <img src="{{asset($main_image)}}" width="300px">
-                    <span>16:9 ratio</span>
-                </div>
+                {{--                <div class="form-group">--}}
+                {{--                    <label>Main Picture </label>--}}
+                {{--                    <input class="form-control" type="file" name="main_image" id="main_image">--}}
+                {{--                    <img src="{{asset($main_image)}}" width="300px">--}}
+                {{--                    <span>16:9 ratio</span>--}}
+                {{--                </div>--}}
                 <div class="form-group">
                     <label for="title"> Title </label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">
                 </div>
                 <div class="form-group">
-                    <label for="title"> Description </label>
-                    <textarea type="text" class="form-control" id="description" onkeyup="countChar(this, 400);"
-                              name="description">{{ $post->description }}</textarea>
-                    <div id="the-count">
-                        <span id="charNum">{{ strlen($post->description) }} </span>
-                        <span id="maximum">/ 400</span>
-                        <p id="count-error"></p>
-                    </div>
+                    {{--                    <label for="title"> Description </label>--}}
+                    {{--                    <textarea type="text" class="form-control" id="description" onkeyup="countChar(this, 400);"--}}
+                    {{--                              name="description">{{ $post->description }}</textarea>--}}
+                    {{--                    <div id="the-count">--}}
+                    {{--                        <span id="charNum">{{ strlen($post->description) }} </span>--}}
+                    {{--                        <span id="maximum">/ 400</span>--}}
+                    {{--                        <p id="count-error"></p>--}}
+                    {{--                    </div>--}}
                     <div class="form-group">
                         <label>Content</label>
                         <textarea id="ckeditor" class="form-control" name="content">{{$post->content}}</textarea>
                     </div>
                     <input type="hidden" name="id" value="{{$postId}}">
+                    
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a class="btn btn-warning" href="{{route('admin.index')}}" title="">Exit</a>
+
                 </div>
             </form>
-
+            <button id="previewButton" class="btn btn-success btn-block">Preview</button>
+        </div>
+        <div class="col-lg-6">
+            <div id="contentPreview" style="padding-top: 30px">
+                PREVIEW
+            </div>
         </div>
     </div>
 @endsection
 @push('scripts')
-    <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
-    <script>
-        CKEDITOR.replace('ckeditor', {
-            height: 500,
-            filebrowserUploadUrl: "{{route('admin.upload', ['_token' => csrf_token()])}}",
-            filebrowserUploadMethod: "form"
-        });
-    </script>
-    @include('script.custom')
+    <x-scripts.ckeditor-conf/>
 @endpush
