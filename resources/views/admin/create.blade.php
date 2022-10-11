@@ -4,7 +4,7 @@
     @include('error.error')
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-lg-6">
                 <div class="card-body">
                     <form method="post" action="{{ route('admin.create') }}" enctype="multipart/form-data">
                         @csrf
@@ -51,6 +51,14 @@
                             <button type="submit" class="btn btn-success btn-block">Publish</button>
                         </div>
                     </form>
+                    <div class="form-group text-center">
+                        <button id="previewButton" class="btn btn-success btn-block">Preview</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div id="contentPreview" style="padding-top: 30px">
+                    content
                 </div>
             </div>
         </div>
@@ -58,6 +66,7 @@
 @endsection
 @push('scripts')
     <script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
+    <script src="{{asset('assets/js/jquery.min.js')}}"></script>
     <script>
         CKEDITOR.replace('ckeditor', {
             height: 500,
@@ -68,6 +77,16 @@
         function getName(value) {
             console.log(value);
         }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#previewButton').click(function () {
+                var contents = CKEDITOR.instances['ckeditor'].getData();
+
+                $('#contentPreview').html(contents);
+            });
+
+        });
     </script>
     @include('script.custom')
 @endpush
