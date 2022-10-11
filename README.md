@@ -85,7 +85,7 @@ php artisan db:seed (if you want the tags I used to develop the blog)
 
 ## DEMO Website
 
-[BASIC BLOG DEMO](https://basicblogdemo.com:16391)
+[BASIC BLOG DEMO](https://basicblogdemo.com)
 
 ## Author
 
