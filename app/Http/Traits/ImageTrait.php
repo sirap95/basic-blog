@@ -69,54 +69,6 @@ trait ImageTrait
         $id = $image->id;
         return $id;
     }
-    /*
-    public function updatePreviewImage(Request $request, $post, $update)
-    {
-
-        if($request->hasFile('preview_image'))
-        {
-            if($update)
-            {
-
-                $destination = 'images/preview_images/'.$post->preview_image;
-                if (File::exists($destination))
-                {
-                    File::delete($destination);
-                }
-            }
-            $this->extract('preview_image', 'preview_images', $request, $post, 'preview_image');
-        }
-    } */
-    //TODO: Delete row in post_image if already exist and delete image on S3 Bucket
-    public function uploadMainImageNew(Request $request, $post, $update)
-    {
-        $request->validate([
-            'main_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        if ($update) {
-            $main_image_url = Image::where('post_id', '=', $post->id)
-                ->where('folder', '=', 'main_images')
-                ->value('url');
-
-            Storage::disk('s3')->delete($main_image_url);
-
-            Image::where('post_id', '=', $post->id)
-                ->where('folder', '=', 'main_images')->delete();
-        }
-        $file = $request->main_image;
-        $randomFileName = uniqid(rand());
-        $path = 'main_images/' . $randomFileName . '.' . $request->main_image->extension();
-        Storage::disk('s3')->put($path, file_get_contents($file));
-        $pathUrl = Storage::disk('s3')->url($path);
-        $image = new Image;
-        $image->filename = $path;
-        $image->url = $pathUrl;
-        $image->folder = 'main_images';
-        $image->save();
-
-        $id = $image->id;
-        return $id;
-    }
 
     public function uploadProfileImageNew(Request $request, $id, $update)
     {
@@ -149,19 +101,5 @@ trait ImageTrait
         $image->save();
 
     }
-    /*
-        public function uploadProfileImage(Request $request, $admin, $update)
-        {
-            if ($request->hasFile('profile_image')) {
-                if ($update) {
-                    $destination = 'images/profile_images/' . $admin->profile_image;
-                    if (File::exists($destination)) {
-                        File::delete($destination);
-                    }
-                }
-                $this->extract('profile_image', 'profile_images', $request, $admin, 'profile_image');
-            }
-        }
-    */
-
+  
 }

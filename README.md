@@ -5,7 +5,7 @@ Basic Blog is a free easy to use template to create your first blog.
 The focus of this template is the backend, it will allow you to practice with Laravel and all the basic function to
 start learning and improve your knowledge. You will just need to apply a bootstrap template for the guest side.
 
-Current version: V0.5
+Current version: V0.6
 
 Laravel v9.3.1
 
@@ -46,6 +46,14 @@ v0.5
 - Implementation of AWS S3
 - Minor bugfix
 
+v0.6
+
+- Added preview button for Edit and Create Post
+- removed main image and Description, Implemented in CKEDITOR
+- uploaded CKEditor cdn to v4.20
+- Minor Bugfix
+
+
 ## Installation
 
 If you have already a working enviroment skip to the section 2
@@ -59,12 +67,25 @@ otherwise:
 section 2:
 
 ```bash
+#clone the repository
 git clone https://github.com/sirap95/basic-blog.git
 
+#run composer
 composer install
 
+#create .env file
+mv .env.example .env
+
+#generate the key in the .env file
+php artisan key:generate
+
+#add database address, name, user and password
+sudo nano .env ( check if php generated correctly your key and add the info of your database in the .env file)
+
+#create all the necessary tables
 php artisan migrate
 
+#seed the database if you want
 php artisan db:seed (if you want the tags I used to develop the blog)
 ```
 
@@ -72,7 +93,7 @@ php artisan db:seed (if you want the tags I used to develop the blog)
 
 ## DEMO Website
 
-coming soon...
+[BASIC BLOG DEMO](https://basicblogdemo.com)
 
 ## Author
 
