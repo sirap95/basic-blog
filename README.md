@@ -54,17 +54,30 @@ otherwise:
 
 - [Install Laravel](https://laravel.com/docs/9.x/installation)
 - [Install IDE es. visual studio code](https://code.visualstudio.com/download)
-- [Create AWS Account and S£ Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
+- [Create AWS Account and S3 Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 
 section 2:
 
 ```bash
+#clone the repository
 git clone https://github.com/sirap95/basic-blog.git
 
+#run composer
 composer install
 
+#create .env file
+mv .env.example .env
+
+#generate the key in the .env file
+php artisan key:generate
+
+#add database address, name, user and password
+sudo nano .env ( check if php generated correctly your key and add the info of your database in the .env file)
+
+#create all the necessary tables
 php artisan migrate
 
+#seed the database if you want
 php artisan db:seed (if you want the tags I used to develop the blog)
 ```
 
@@ -72,7 +85,7 @@ php artisan db:seed (if you want the tags I used to develop the blog)
 
 ## DEMO Website
 
-coming soon...
+[BASIC BLOG DEMO](https://basicblogdemo.com)
 
 ## Author
 
