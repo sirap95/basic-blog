@@ -43,7 +43,7 @@
                                         @endforeach
                                         <h4><a href="{{ route('guest.post', ['id' => $post->id]) }}"
                                                title="">{{ $post->title }}</a></h4>
-                                        <p>{{ \Illuminate\Support\Str::limit($post->description, 150) }} </p>
+                                        <p>{!! \Illuminate\Support\Str::limit($post->content, 110)  !!}  </p>
                                         <small><i class="fa fa-eye"></i>
                                             {{$post->views}}
                                         </small>

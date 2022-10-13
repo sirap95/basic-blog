@@ -17,7 +17,6 @@ class PostController extends Controller
     public function getIndex()
     {
         $posts = Post::with('users')->latest()->paginate(6);
-        //$preview_images = Image::with('Posts')->where('folder', '=', 'preview_images')->get();
         return view('guest.index', ['posts' => $posts, 'topPosts' => $this->getTopPosts(), 'preview_images' => $this->getPreviewImages()]);
     }
 
@@ -94,9 +93,6 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $tags = Tag::all();
-//        $main_image_url = Image::where('post_id', '=', $id)
-//            ->where('folder', '=', 'main_images')
-//            ->value('url');
         $preview_image_url = Image::where('post_id', '=', $id)
             ->where('folder', '=', 'preview_images')
             ->value('url');
@@ -114,24 +110,20 @@ class PostController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|min:5',
-            //'description' => 'required|min:5|max:400',
             'content' => 'required|min:15',
             'tag' => 'required'
         ]);
         $post = new Post;
 
         $post->title = $request->input('title');
-        //$post->description = $request->input('description');
         $post->content = $request->input('content');
         $preview_image_id = $this->uploadPreviewImageNew($request, null, false);
-        //$main_image_id = $this->uploadMainImageNew($request, null, false);
         $post->user_id = Auth::id();
         $post->save();
 
         $id = $post->id;
 
         Image::where('id', '=', $preview_image_id)->update(array('post_id' => $id));
-        //Image::where('id', '=', $main_image_id)->update(array('post_id' => $id));
 
         $tag = Tag::select('id')->where('name', $request->input('tag'))->get();
         $post->tags()->attach($tag);
@@ -149,19 +141,15 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required|min:5',
             'content' => 'required|min:15',
-//            'description' => 'required|min:15|max:400',
             'tag' => 'required',
 //            'main_image',
             'preview_image'
         ]);
         $post = Post::find($id);
         $post->title = $request->input('title');
-//        $post->description = $request->input('description');
         $post->content = $request->input('content');
         if (!empty($request->input('preview_image')))
             $this->uploadPreviewImageNew($request, $post, true);
-//        if (!empty($request->input('main_image')))
-//            $this->uploadMainImageNew($request, $post, true);
         $post->update();
 
         $current_tag_name = "CURRENT TAG: " . $post->tags->first()->name;

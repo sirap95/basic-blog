@@ -30,22 +30,9 @@
                                             <span class="down-mobile">Share on Facebook</span></a></li>
                                     <li><a href="#" class="tw-button btn btn-primary"><i class="fa fa-twitter"></i>
                                             <span class="down-mobile">Tweet on Twitter</span></a></li>
-                                    <!-- <li><a href="#" class="wh-button btn btn-primary"><i class="fa fa-whatsapp"></i>
-                                             <span class="down-mobile"> Share on Whatsapp</span></a></li> -->
                                 </ul>
                             </div><!-- end post-sharing -->
                         </div><!-- end title -->
-
-                        {{--                        <div class="single-post-media">--}}
-                        {{--                            <img src="{{$main_image_url}}" alt="" class="img-fluid">--}}
-                        {{--                        </div><!-- end media -->--}}
-
-                        {{--                        <div class="blog-content">--}}
-                        {{--                            <div class="pp">--}}
-                        {{--                                <h4> {{$post->description}} </h4>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div><!-- end content -->--}}
-
 
                         <div class="blog-content">
                             <div class="pp">
