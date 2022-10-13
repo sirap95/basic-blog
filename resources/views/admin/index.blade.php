@@ -21,9 +21,7 @@
         <thead>
         <tr>
             <th scope="col"> Title</th>
-            <th scope="col"> Description</th>
             <th scope="col"> Preview Image</th>
-            <th scope="col"> Main Image</th>
             <th scope="col"> Views</th>
             <th scope="col"> Created at</th>
             <th scope="col"> Actions</th>
@@ -33,16 +31,9 @@
         @foreach($posts as $post)
             <tr>
                 <td>{{ $post->title }}</td>
-                <td>{{ \Illuminate\Support\Str::limit($post->description, 60) }} </td>
                 @foreach($preview_images as $preview_image)
                     @if($preview_image->post_id == $post->id)
                         <td><img src="{{asset($preview_image->url)}}" width="50px"></td>
-                    @endif
-                @endforeach
-                @foreach($main_images as $main_image)
-                    @if($main_image->post_id == $post->id)
-                        <td><img src="{{asset($main_image->url)}}"
-                                 width="50px"></td>
                     @endif
                 @endforeach
                 <td>{{ $post->views }}</td>
