@@ -64,6 +64,17 @@ otherwise:
 - [Install IDE es. visual studio code](https://code.visualstudio.com/download)
 - [Create AWS Account and S3 Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)
 
+if using sail: 
+
+```
+#add sail
+composer require laravel/sail --dev
+
+#publish the sail configuration
+php artisan sail:install
+
+```
+
 section 2:
 
 ```bash
